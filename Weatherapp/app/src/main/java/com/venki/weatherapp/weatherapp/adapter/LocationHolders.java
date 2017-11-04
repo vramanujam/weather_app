@@ -27,7 +27,8 @@ public class LocationHolders extends RecyclerView.ViewHolder{
         super(itemView);
         locationCity = (TextView) itemView.findViewById(R.id.city_location);
         weatherInformation = (TextView)itemView.findViewById(R.id.temp_info);
-        selectableRadioButton = (RadioButton)itemView.findViewById(R.id.radio_button);
+        //to be changed by venkatesh
+        //selectableRadioButton = (RadioButton)itemView.findViewById(R.id.radio_button);
         deleteText = (TextView)itemView.findViewById(R.id.delete_row);
         deleteText.setTextColor(Color.RED);
 

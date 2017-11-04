@@ -10,21 +10,6 @@
     android:orientation="horizontal">
 
     <LinearLayout
-        android:id="@+id/radio_button_wrapper"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
-        <RadioButton
-            android:id="@+id/radio_button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center" />
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/location_wrapper"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

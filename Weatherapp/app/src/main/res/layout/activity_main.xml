@@ -6,7 +6,22 @@
     android:background="@color/colorBackground"
     tools:context="com.venki.weatherapp.weatherapp.MainActivity">
 
-    <ImageButton
+    <!-- <LinearLayout
+        android:id="@+id/add_location"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <fragment
+            android:id="@+id/place_autocomplete_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+            />
+
+    </LinearLayout> -->
+    <!--<ImageButton
         android:id="@+id/add_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,7 +30,13 @@
         android:layout_alignParentTop="true"
         android:elevation="@dimen/_4sdp"
         android:layout_margin="@dimen/_24sdp"
-        android:src="@drawable/cross"/>
+        android:src="@drawable/cross"/>-->
+    <fragment
+        android:id="@+id/add_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/location_list"

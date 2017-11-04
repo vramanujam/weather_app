@@ -58,17 +58,26 @@ public class DatabaseQuery extends DatabaseObject{
         return false;
     }
 
-    public void insertNewLocation(String cityCountry){
+    public boolean insertNewLocation(String cityCountry){
         ContentValues values = new ContentValues();
+        boolean bret = false;
         values.put("cotent", cityCountry);
         if(!isLocationExist(cityCountry)){
+            bret = true;
             getDbConnection().insert(TABLE_NAME, null, values);
         }
         getDbConnection().close();
+        return bret;
     }
 
     public boolean deleteLocation(int locationId){
         return getDbConnection().delete(TABLE_NAME, KEY_NAME + "=" + locationId, null) > 0;
+    }
+
+    public void deleteLocation(String location){
+        String query = "delete from table where location = " + location;
+        Cursor cursor = this.getDbConnection().rawQuery(query, null);
+        cursor.close();
     }
 
     public void deleteAllLocationContent(){

@@ -20,7 +20,7 @@ import com.venki.weatherapp.weatherapp.helpers.CustomSharedPreference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LocationAdapter extends RecyclerView.Adapter<LocationHolders> implements CompoundButton.OnCheckedChangeListener{
+public class LocationAdapter extends RecyclerView.Adapter<LocationHolders> /*implements CompoundButton.OnCheckedChangeListener*/{
 
     private List<LocationObject> locationObjects;
 
@@ -61,7 +61,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolders> imple
             @Override
             public void onClick(View view) {
                 int databaseIndex = locationObjects.get(position).getId();
-                if(!holder.selectableRadioButton.isChecked()){
+                //if(!holder.selectableRadioButton.isChecked())
+                 {
                     query.deleteLocation(databaseIndex);
                     locationObjects.remove(position);
                     notifyItemRemoved(position);
@@ -84,14 +85,14 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolders> imple
         String buttonId = sharedPreference.getLocationInPreference();
         System.out.println("Stored id " + buttonId);
 
-        holder.selectableRadioButton.setOnCheckedChangeListener(this);
-        setRadioButtonId(holder.selectableRadioButton, position);
-        allRadioButton.add(new ViewEntityObject(holder.selectableRadioButton, locationObjects.get(position).getLocationCity()));
+        //holder.selectableRadioButton.setOnCheckedChangeListener(this);
+        //setRadioButtonId(holder.selectableRadioButton, position);
+        //allRadioButton.add(new ViewEntityObject(holder.selectableRadioButton, locationObjects.get(position).getLocationCity()));
 
-        String storedCityLocation = sharedPreference.getLocationInPreference();
-        if(allRadioButton.get(position).getRadioName().equals(storedCityLocation)){
-            holder.selectableRadioButton.setChecked(true);
-        }
+        //String storedCityLocation = sharedPreference.getLocationInPreference();
+        //if(allRadioButton.get(position).getRadioName().equals(storedCityLocation)){
+        //    holder.selectableRadioButton.setChecked(true);
+        //}
 
     }
 
@@ -100,7 +101,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolders> imple
         return this.locationObjects.size();
     }
 
-    @Override
+    /*@Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
         if(isChecked){
             RadioButton radioButton = (RadioButton)compoundButton;
@@ -115,7 +116,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolders> imple
             }
         }
 
-    }
+    }*/
 
     private void setRadioButtonId(RadioButton mButton, int position){
         if(position == 0){
