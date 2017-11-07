@@ -53,8 +53,32 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolders> /*imp
         return viewHolder;
     }
 
+    public int getLocationIndex(String cityName)
+    {
+        System.out.println("removeLocation");
+        int index = 0;
+        for(LocationObject L: locationObjects){
+            System.out.println(L.getLocationCity() + " " + cityName);
+            if(L.getLocationCity().equals(cityName)){
+                //locationObjects.remove(index);
+                return index;
+            }
+            index++;
+        }
+        return -1;
+    }
+    public void removeLocation(String cityName){
+        int Index = getLocationIndex(cityName);
+        int databaseIndex = locationObjects.get(Index).getId();
+        query.deleteLocation(databaseIndex);
+        locationObjects.remove(Index);
+        notifyItemRemoved(Index);
+    }
     @Override
     public void onBindViewHolder(final LocationHolders holder, final int position) {
+
+        final String cityName = locationObjects.get(position).getLocationCity();
+        System.out.println("cityName:" + cityName + " " + "position:" + position);
         holder.locationCity.setText(Html.fromHtml(locationObjects.get(position).getLocationCity()));
         holder.weatherInformation.setText(Html.fromHtml(locationObjects.get(position).getWeatherInformation()));
         holder.deleteText.setTag(R.id.TAG_KEY, String.valueOf(locationObjects.get(position).getId()));
@@ -62,13 +86,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolders> /*imp
         holder.deleteText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int databaseIndex = locationObjects.get(position).getId();
-                //if(!holder.selectableRadioButton.isChecked())
-                 {
-                    query.deleteLocation(databaseIndex);
-                    locationObjects.remove(position);
-                    notifyItemRemoved(position);
-                }
+                removeLocation(cityName);
             }
         });
 
@@ -76,11 +94,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolders> /*imp
             @Override
             public void onClick(View view) {
                 Intent addLocationIntent = new Intent(context, WeatherActivity.class);
-             //   System.out.println("ajhdakjhdkajshdkjh");
-             //   System.out.println(locationObjects.get(position).getLocationCity());
-                addLocationIntent.putExtra("city",locationObjects.get(position).getLocationCity());
+                addLocationIntent.putExtra("city",cityName);
                 context.startActivity(addLocationIntent);
-                //Toast.makeText(context, "should change", Toast.LENGTH_LONG).show();
             }
         });
         holder.weatherInformation.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +103,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolders> /*imp
             public void onClick(View view) {
                 //Toast.makeText(context, "should change", Toast.LENGTH_LONG).show();
                 Intent addLocationIntent = new Intent(context, WeatherActivity.class);
-                addLocationIntent.putExtra("city",locationObjects.get(position).getLocationCity());
+                addLocationIntent.putExtra("city",cityName);
                 context.startActivity(addLocationIntent);
             }
         });

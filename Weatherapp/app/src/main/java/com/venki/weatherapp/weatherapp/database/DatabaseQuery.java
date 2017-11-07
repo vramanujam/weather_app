@@ -37,6 +37,17 @@ public class DatabaseQuery extends DatabaseObject{
         return allLocations;
     }
 
+    public int getDBIndex(String city){
+        int id = -1;
+        String query = "Select id from data where cotent=" + "'"+city+"'";
+        Cursor cursor = this.getDbConnection().rawQuery(query, null);
+        if(cursor.moveToFirst()){
+                id = cursor.getInt(0);
+        }
+        cursor.close();
+
+        return id;
+    }
     public int countAllStoredLocations(){
         int total = 0;
         String query = "Select * from data";
@@ -75,7 +86,7 @@ public class DatabaseQuery extends DatabaseObject{
     }
 
     public void deleteLocation(String location){
-        String query = "delete from table where location = " + location;
+        String query = "delete from data where cotent=" + "'"+location+"'";
         Cursor cursor = this.getDbConnection().rawQuery(query, null);
         cursor.close();
     }

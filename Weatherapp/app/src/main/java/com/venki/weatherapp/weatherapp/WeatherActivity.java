@@ -19,6 +19,8 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -166,7 +168,37 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
         recyclerView.setHasFixedSize(true);
     }
 
+    //-----
+    private final GestureDetector gdt = new GestureDetector(new     GestureListener());
 
+    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
+
+        private final int SWIPE_MIN_DISTANCE = 120;
+        private final int SWIPE_THRESHOLD_VELOCITY = 200;
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            if(e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) >     SWIPE_THRESHOLD_VELOCITY) {
+                System.out.println("swipe right");
+                // Right to left, your code here
+                return true;
+            } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE &&     Math.abs(velocityX) >  SWIPE_THRESHOLD_VELOCITY) {
+                // Left to right, your code here
+                System.out.println("swipe left");
+                return true;
+            }
+            if(e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) >     SWIPE_THRESHOLD_VELOCITY) {
+                // Bottom to top, your code here
+                return true;
+            } else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE &&    Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
+                // Top to bottom, your code here
+                return true;
+            }
+            return false;
+        }
+    }
+
+    //-----
     private void makeJsonObject(final String apiUrl){
         StringRequest stringRequest = new StringRequest(Request.Method.GET, apiUrl, new Response.Listener<String>() {
             @Override
