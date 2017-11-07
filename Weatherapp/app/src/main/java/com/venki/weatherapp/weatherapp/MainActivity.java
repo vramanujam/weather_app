@@ -102,18 +102,13 @@ public class MainActivity extends AppCompatActivity {
 
                     if(null != allLocations){
                         for(int i = 0; i < allLocations.size(); i++){
-                            // make volley network call here
                             System.out.println("Response printing " + allLocations.get(i).getLocation());
                             requestJsonObject(allLocations.get(i));
                         }
                     }
 
                     Toast.makeText(MainActivity.this, "Count number of locations " + allLocations.size(), Toast.LENGTH_LONG).show();
-
                 }
-                
-
-
             }
 
             @Override

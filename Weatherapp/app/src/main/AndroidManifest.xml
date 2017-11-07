@@ -18,7 +18,8 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCwqpS5Xz-AdLVUm7qNSU2eFy2YuMLPXtY" />
+            android:value="AIzaSyCZdAm6XohRlZgvghhJ0kXarSWXrIH94QE" />
+        <activity android:name=".WeatherActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

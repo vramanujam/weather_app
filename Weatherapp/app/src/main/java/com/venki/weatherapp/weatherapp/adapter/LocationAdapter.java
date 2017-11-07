@@ -2,6 +2,7 @@ package com.venki.weatherapp.weatherapp.adapter;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.venki.weatherapp.weatherapp.R;
+import com.venki.weatherapp.weatherapp.WeatherActivity;
 import com.venki.weatherapp.weatherapp.database.DatabaseQuery;
 import com.venki.weatherapp.weatherapp.entity.LocationObject;
 import com.venki.weatherapp.weatherapp.entity.ViewEntityObject;
@@ -73,13 +75,21 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolders> /*imp
         holder.locationCity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "should change", Toast.LENGTH_LONG).show();
+                Intent addLocationIntent = new Intent(context, WeatherActivity.class);
+             //   System.out.println("ajhdakjhdkajshdkjh");
+             //   System.out.println(locationObjects.get(position).getLocationCity());
+                addLocationIntent.putExtra("city",locationObjects.get(position).getLocationCity());
+                context.startActivity(addLocationIntent);
+                //Toast.makeText(context, "should change", Toast.LENGTH_LONG).show();
             }
         });
         holder.weatherInformation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "should change", Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "should change", Toast.LENGTH_LONG).show();
+                Intent addLocationIntent = new Intent(context, WeatherActivity.class);
+                addLocationIntent.putExtra("city",locationObjects.get(position).getLocationCity());
+                context.startActivity(addLocationIntent);
             }
         });
         String buttonId = sharedPreference.getLocationInPreference();
