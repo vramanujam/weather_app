@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.venki.weatherapp.weatherapp.R;
 import com.venki.weatherapp.weatherapp.WeatherActivity;
+import com.venki.weatherapp.weatherapp.cityview;
 import com.venki.weatherapp.weatherapp.database.DatabaseQuery;
 import com.venki.weatherapp.weatherapp.entity.LocationObject;
 import com.venki.weatherapp.weatherapp.entity.ViewEntityObject;
@@ -93,7 +94,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolders> /*imp
         holder.locationCity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent addLocationIntent = new Intent(context, WeatherActivity.class);
+                Intent addLocationIntent = new Intent(context, cityview.class);
                 addLocationIntent.putExtra("city",cityName);
                 context.startActivity(addLocationIntent);
             }

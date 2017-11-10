@@ -1,4 +1,4 @@
-package com.venki.testviewpager.testviewpager;
+package com.venki.weatherapp.weatherapp;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,26 +7,36 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import com.venki.weatherapp.weatherapp.database.DatabaseQuery;
+
+public class cityview extends AppCompatActivity {
 
     ViewPager mViewPager;
-    int current_index = 0;
+    private DatabaseQuery query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_cityview);
+
+        query = new DatabaseQuery(this);
+        String currentLocation = "";
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            currentLocation = extras.getString("city");
+            //The key argument here must match that used in the other activity
+        }
+        String[] city = currentLocation.split(",");
+        int row = query.getRowNumber(city[0]);
+
         mViewPager = (ViewPager) findViewById(R.id.pager);
 /** set the adapter for ViewPager */
         mViewPager.setAdapter(new SamplePagerAdapter(
                 getSupportFragmentManager()));
-        mViewPager.setCurrentItem(1);
-    }
-    public int getCurrentIndex()
-    {
-        return current_index;
-    }
+        //mViewPager.setCurrentItem(1);
 
+        mViewPager.setCurrentItem(row);
+    }
     public class SamplePagerAdapter extends FragmentPagerAdapter {
 
         public SamplePagerAdapter(FragmentManager fm) {
@@ -38,20 +48,15 @@ public class MainActivity extends AppCompatActivity {
             /** Show a Fragment based on the position of the current screen */
             SampleFragment fragment = new SampleFragment();
             Bundle args = new Bundle();
-            args.putInt("page_position", position + 1);
+            args.putInt("page_position", position);
             fragment.setArguments(args);
             return fragment;
-            /*if (position == 0) {
-                return new SampleFragment();
-            } else
-                return new SampleFragmentTwo();
-                */
         }
 
         @Override
         public int getCount() {
             // Show 2 total pages.
-            return 4;
+            return query.countAllStoredLocations();
         }
     }
 }

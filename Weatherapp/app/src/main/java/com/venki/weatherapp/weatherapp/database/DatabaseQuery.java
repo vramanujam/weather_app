@@ -37,9 +37,22 @@ public class DatabaseQuery extends DatabaseObject{
         return allLocations;
     }
 
+    public String getCityByRowNum(int row){
+        //SELECT * FROM Table LIMIT 10 OFFSET 0
+        String city = null;
+        String query = "Select cotent from data limit 1 offset " + row;
+        Cursor cursor = this.getDbConnection().rawQuery(query, null);
+        if(cursor.moveToFirst()){
+            city = cursor.getString(0);
+        }
+        cursor.close();
+
+        return city;
+    }
+
     public int getDBIndex(String city){
         int id = -1;
-        String query = "Select id from data where cotent=" + "'"+city+"'";
+        String query = "Select _id from data where cotent=" + "'"+city+"'";
         Cursor cursor = this.getDbConnection().rawQuery(query, null);
         if(cursor.moveToFirst()){
                 id = cursor.getInt(0);
@@ -59,6 +72,18 @@ public class DatabaseQuery extends DatabaseObject{
         return total;
     }
 
+    public int getRowNumber(String Location){
+        int rownum = -1;
+        int dbIndex = getDBIndex(Location);
+        String query = "select (select count(*) from data as t2 where t2._id <'"+dbIndex +"') as row_num from data as t1";
+        Cursor cursor = this.getDbConnection().rawQuery(query, null);
+        if(cursor.moveToFirst()){
+            rownum = cursor.getInt(0);
+        }
+        cursor.close();
+        System.out.println("getRowNumber " + rownum + " " + Location );
+        return rownum;
+    }
     private boolean isLocationExist(String location){
         String query = "Select * from data where cotent=" + "'"+location+"'";
         Cursor cursor = this.getDbConnection().rawQuery(query, null);

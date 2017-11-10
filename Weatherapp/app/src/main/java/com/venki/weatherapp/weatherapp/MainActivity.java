@@ -17,6 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
@@ -63,12 +64,15 @@ public class MainActivity extends AppCompatActivity {
         //query = new DatabaseQuery(MainActivity.this);
         //query.insertNewLocation("chennai");
         query = new DatabaseQuery(MainActivity.this);
+        //query.deleteAllLocationContent();
         allLocations = query.getStoredDataLocations();
 
         if(null != allLocations){
             for(int i = 0; i < allLocations.size(); i++){
                 // make volley network call here
                 System.out.println("Response printing " + allLocations.get(i).getLocation());
+                System.out.println("row id:"+query.getRowNumber(allLocations.get(i).getLocation()));
+                System.out.println("City by rownum " + query.getCityByRowNum(query.getRowNumber(allLocations.get(i).getLocation())));
                 requestJsonObject(allLocations.get(i));
             }
         }
@@ -117,6 +121,11 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, "An error occurred: " + status);
             }
         });
+        AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
+                .setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES)
+                .build();
+
+        autocompleteFragment.setFilter(typeFilter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
         locationRecyclerView = (RecyclerView) findViewById(R.id.location_list);

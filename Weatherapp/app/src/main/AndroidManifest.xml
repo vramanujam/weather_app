@@ -20,7 +20,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="" />
+            android:value="AIzaSyCZdAm6XohRlZgvghhJ0kXarSWXrIH94QE" />
 
         <activity android:name=".WeatherActivity" />
         <activity android:name=".MainActivity">
@@ -30,6 +30,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".cityview"></activity>
     </application>
 
 </manifest>
