@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
         locationRecyclerView = (RecyclerView) findViewById(R.id.location_list);
         locationRecyclerView.setLayoutManager(linearLayoutManager);
     }
+
     private void requestJsonObject(final DatabaseLocationObject paramValue){
         String url ="http://api.openweathermap.org/data/2.5/weather?q="+paramValue.getLocation()+"&APPID="+ Helper.API_KEY+"&units=metric";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
