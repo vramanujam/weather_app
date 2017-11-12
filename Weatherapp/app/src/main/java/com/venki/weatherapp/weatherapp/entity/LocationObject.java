@@ -9,10 +9,16 @@ public class LocationObject {
 
     private String weatherInformation;
 
-    public LocationObject(int id, String locationCity, String weatherInformation) {
+    private String temp_min_max;
+
+    private String currTime;
+
+    public LocationObject(int id, String locationCity, String weatherInformation, String temp_min_max, String timeToDisplay) {
         this.id = id;
         this.locationCity = locationCity;
         this.weatherInformation = weatherInformation;
+        this.temp_min_max = temp_min_max;
+        this.currTime = timeToDisplay;
     }
 
     public String getLocationCity() {
@@ -22,6 +28,10 @@ public class LocationObject {
     public String getWeatherInformation() {
         return weatherInformation;
     }
+
+    public  String getTempMinMax() {return temp_min_max;}
+
+    public  String getCurrTime() {return currTime;}
 
     public int getId() {
         return id;

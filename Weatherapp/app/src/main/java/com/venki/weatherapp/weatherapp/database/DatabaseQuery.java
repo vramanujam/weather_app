@@ -14,6 +14,8 @@ public class DatabaseQuery extends DatabaseObject{
 
     private final String TABLE_NAME = "data";
 
+    private final String METRIC_TABLE_NAME = "degree";
+
     private final String KEY_NAME = "_id";
 
     public DatabaseQuery(Context context) {
@@ -144,6 +146,26 @@ public class DatabaseQuery extends DatabaseObject{
         getDbConnection().replace("currentlocation",null,values);
         //getDbConnection().close();
         return bret;
+    }
+	 public boolean insertUserDegreeMetric(String metric){
+        ContentValues values = new ContentValues();
+        values.put("id",1);
+        values.put("degreeMetric", metric);
+        getDbConnection().replace(METRIC_TABLE_NAME, null, values);
+        getDbConnection().close();
+        return true;
+    }
+
+    public String getUserDegreeMetric () {
+        String degMetric = "";
+        String query = "Select degreeMetric from degree limit 1 offset 0";
+        Cursor cursor = this.getDbConnection().rawQuery(query, null);
+        if(cursor.moveToFirst()){
+            degMetric = cursor.getString(0);
+        }
+        cursor.close();
+
+        return degMetric;
     }
     public boolean deleteLocation(int locationId){
         return getDbConnection().delete(TABLE_NAME, KEY_NAME + "=" + locationId, null) > 0;

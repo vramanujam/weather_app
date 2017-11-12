@@ -34,6 +34,23 @@
             android:layout_marginTop="@dimen/_4sdp"
             android:textColor="@color/colorWhite"/>
 
+        <TextView
+            android:id="@+id/temp_min_max"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_12sdp"
+            android:text="@string/temp_information"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/curr_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_12sdp"
+            android:text="@string/temp_information"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:textColor="@color/colorWhite"/>
     </LinearLayout>
 
     <LinearLayout

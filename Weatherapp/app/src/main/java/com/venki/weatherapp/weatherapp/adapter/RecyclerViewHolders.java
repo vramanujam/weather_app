@@ -19,11 +19,14 @@ public class RecyclerViewHolders extends RecyclerView.ViewHolder{
 
     public TextView weatherResultSmall;
 
+    public TextView weatherResultBig;
+
     public RecyclerViewHolders(final View itemView) {
         super(itemView);
         dayOfWeek = (TextView)itemView.findViewById(R.id.day_of_week);
         weatherIcon = (ImageView)itemView.findViewById(R.id.weather_icon);
         weatherResult = (TextView) itemView.findViewById(R.id.weather_result);
         weatherResultSmall = (TextView)itemView.findViewById(R.id.weather_result_small);
+        weatherResultBig = (TextView)itemView.findViewById(R.id.weather_result_big);
     }
 }

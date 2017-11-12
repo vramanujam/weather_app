@@ -19,7 +19,13 @@ public class LocationHolders extends RecyclerView.ViewHolder{
 
     public TextView weatherInformation;
 
+    public TextView tempMinMax;
+
     public TextView deleteText;
+
+    public TextView currTimeView;
+
+
 
     public RadioButton selectableRadioButton;
 
@@ -27,6 +33,9 @@ public class LocationHolders extends RecyclerView.ViewHolder{
         super(itemView);
         locationCity = (TextView) itemView.findViewById(R.id.city_location);
         weatherInformation = (TextView)itemView.findViewById(R.id.temp_info);
+        tempMinMax = (TextView) itemView.findViewById(R.id.temp_min_max);
+        currTimeView = (TextView) itemView.findViewById(R.id.curr_time);
+
         //to be changed by venkatesh
         //selectableRadioButton = (RadioButton)itemView.findViewById(R.id.radio_button);
         deleteText = (TextView)itemView.findViewById(R.id.delete_row);

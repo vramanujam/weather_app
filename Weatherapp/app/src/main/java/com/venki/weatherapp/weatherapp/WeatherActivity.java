@@ -311,8 +311,8 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         String temp = weatherInfo.get(i).getMain().getTemp();
                         String tempMin = weatherInfo.get(i).getMain().getTemp_min();
 
-                        if(convertTimeToDay(time).equals("Mon") && everyday[0] < 1){
-                            daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin));
+                        /*if(convertTimeToDay(time).equals("Mon") && everyday[0] < 1){
+                            daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin,tempMax));
                             everyday[0] = 1;
                         }
                         if(convertTimeToDay(time).equals("Tue") && everyday[1] < 1){
@@ -338,7 +338,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                         if(convertTimeToDay(time).equals("Sun") && everyday[6] < 1){
                             daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin));
                             everyday[6] = 1;
-                        }
+                        }*/
                         recyclerViewAdapter = new RecyclerViewAdapter(WeatherActivity.this, daysOfTheWeek);
                         recyclerView.setAdapter(recyclerViewAdapter);
                     }

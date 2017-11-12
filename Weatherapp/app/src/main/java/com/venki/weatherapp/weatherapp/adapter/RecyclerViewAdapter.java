@@ -40,7 +40,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
             holder.weatherResult.setText(String.valueOf(Math.round(mTemp)) + "°");
 
             holder.weatherResultSmall.setText(dailyWeather.get(position).getWeatherResultSmall());
-            holder.weatherResultSmall.setVisibility(View.GONE);
+            holder.weatherResultBig.setText(dailyWeather.get(position).getWeatherResultBig());
+//            holder.weatherResultSmall.setVisibility(View.GONE);
     }
 
     @Override

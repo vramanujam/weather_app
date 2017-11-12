@@ -21,10 +21,18 @@ public class Helper {
 
     public static final String API_KEY = "";
 
+    public static final String TIMEZONE_API_KEY = "";
+
     public static String capitalizeFirstLetter(String original) {
         if (original == null || original.length() == 0) {
             return original;
         }
         return original.substring(0, 1).toUpperCase() + original.substring(1);
+    }
+
+    public static long convertCelsiusToFahrenheit (long centigrade) {
+        long fahrenheit;
+        fahrenheit = centigrade * (9/5) + 32;
+        return fahrenheit;
     }
 }

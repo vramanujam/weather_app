@@ -13,7 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -23,6 +26,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.api.Status;
@@ -39,7 +43,12 @@ import com.venki.weatherapp.weatherapp.entity.LocationObject;
 import com.venki.weatherapp.weatherapp.helpers.Helper;
 import com.venki.weatherapp.weatherapp.json.LocationMapObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
@@ -66,12 +75,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private String provider;
 
     private Location location;
+	
+	private String degreeMetric;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
         setTitle(Helper.LOCATION_LIST);
 
@@ -197,7 +210,63 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         locationRecyclerView = (RecyclerView) findViewById(R.id.location_list);
         locationRecyclerView.setLayoutManager(linearLayoutManager);
     }
+	
+	//--
+	 @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+         int current_selected_id = R.id.menu_centigrade;
+         if(query.getUserDegreeMetric().equals("Fahrenheit"))
+             current_selected_id = R.id.menu_fahrenheit ;
+         MenuItem refresh = menu.findItem(current_selected_id);
+         refresh.setChecked(true);
+         //refresh.setEnabled(true);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_fahrenheit:
+                if (item.isChecked()) item.setChecked(false);
+                else item.setChecked(true);
+                query.insertUserDegreeMetric("Fahrenheit");
+
+                allData = new ArrayList<LocationObject>();
+                query = new DatabaseQuery(MainActivity.this);
+                allLocations = query.getStoredDataLocations();
+
+                if (null != allLocations) {
+                    for (int i = 0; i < allLocations.size(); i++) {
+                        // make volley network call here
+                        System.out.println("Response printing " + allLocations.get(i).getLocation());
+                        requestJsonObject(allLocations.get(i));
+                    }
+                }
+                return true;
+            case R.id.menu_centigrade:
+                if (item.isChecked()) item.setChecked(false);
+                else item.setChecked(true);
+                query.insertUserDegreeMetric("Centigrade");
+
+                allData = new ArrayList<LocationObject>();
+                query = new DatabaseQuery(MainActivity.this);
+                allLocations = query.getStoredDataLocations();
+
+                if (null != allLocations) {
+                    for (int i = 0; i < allLocations.size(); i++) {
+                        // make volley network call here
+                        System.out.println("Response printing " + allLocations.get(i).getLocation());
+                        requestJsonObject(allLocations.get(i));
+                    }
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+	//--
     @Override
     public void onLocationChanged(Location location) {
         //You had this as int. It is advised to have Lat/Loing as double.
@@ -268,16 +337,84 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 if (null == locationMapObject) {
                     Toast.makeText(getApplicationContext(), "Nothing was returned", Toast.LENGTH_LONG).show();
                 } else {
-                    int rowId = paramValue.getId();
+                    final int rowId = paramValue.getId();
                     Long tempVal = Math.round(Math.floor(Double.parseDouble(locationMapObject.getMain().getTemp())));
-                    String city = locationMapObject.getName() + ", " + locationMapObject.getSys().getCountry();
-                    //
-                    String weatherInfo = String.valueOf(tempVal) + "<sup>o</sup>, " + Helper.capitalizeFirstLetter(locationMapObject.getWeather().get(0).getDescription());
-                    allData.add(new LocationObject(rowId, city, weatherInfo));
+                    Long tempMin = Math.round(Math.floor(Double.parseDouble(locationMapObject.getMain().getTemp_min())));
+                    Long tempMax = Math.round(Math.floor(Double.parseDouble(locationMapObject.getMain().getTemp_max())));
 
-                    //to be modified - venkatesh
-                    locationAdapter = new LocationAdapter(MainActivity.this, allData);
-                    locationRecyclerView.setAdapter(locationAdapter);
+
+                    System.out.println("Degree preference" + query.getUserDegreeMetric());
+
+                    degreeMetric = "C";
+
+                    if(query.getUserDegreeMetric().equals("Fahrenheit")) {
+                        System.out.println("Degree preference inside if" + query.getUserDegreeMetric());
+                        tempVal = Helper.convertCelsiusToFahrenheit(tempVal);
+                        tempMin = Helper.convertCelsiusToFahrenheit(tempMin);
+                        tempMax = Helper.convertCelsiusToFahrenheit(tempMax);
+                        degreeMetric = "F";
+                    }
+
+                    final String city = locationMapObject.getName() + ", " + locationMapObject.getSys().getCountry();
+                    final String weatherInfo = String.valueOf(tempVal) + "<sup>o</sup>" + degreeMetric + ", " + Helper.capitalizeFirstLetter(locationMapObject.getWeather().get(0).getDescription());
+                    final String tempMinMax = "Min Temp: " + String.valueOf(tempMin) + "<sup>o</sup>" + degreeMetric + "," + " " + "Max Temp: " + String.valueOf(tempMax) + "<sup>o</sup>" + degreeMetric + "";
+
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    final long finalTs = timestamp.getTime()/1000;
+
+                    String loc = locationMapObject.getCoord().getLat() + "," + locationMapObject.getCoord().getLon();
+
+                    String google_url = "https://maps.googleapis.com/maps/api/timezone/json?location=" + loc + "&timestamp=" + finalTs + "&key=" + Helper.TIMEZONE_API_KEY;
+
+                    JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, google_url, (String)null, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d("MainActivity", "Response " + response);
+                            System.out.println("Response Object" + response);
+
+//                            response = gson.toJson(response);
+                            try {
+                                // to be fine-tuned by Smitha
+                                String status = response.getString("status");
+                                int dstOffset = response.getInt("dstOffset");
+                                int rawOffset = response.getInt("rawOffset");
+
+                                long localTime = (finalTs + dstOffset + rawOffset)*1000;
+                                System.out.println("Time reponse" + localTime);
+
+                                Calendar cal = Calendar.getInstance();
+                                cal.setTimeInMillis(localTime);
+
+                                String timeToDisplay = String.format("%02d:%02d", cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE));
+
+                                allData.add(new LocationObject(rowId, city, weatherInfo, tempMinMax, timeToDisplay));
+
+                                //to be modified - venkatesh
+                                locationAdapter = new LocationAdapter(MainActivity.this, allData);
+                                locationRecyclerView.setAdapter(locationAdapter);
+
+
+                            }
+                            catch(JSONException e){
+                                Log.e("MYAPP", "unexpected JSON exception", e);
+                            }
+
+
+
+//                            if(response.status == "OK") {
+//                                int dstOffset = response.dstOffset;
+//                                int rawOffset = response.rawOffset;
+//                                System.out.println("dstOff val: " + dstOffset);
+//                                System.out.println("rawOff val: " + rawOffset);
+//                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("MainActivity", "Error " + error.getMessage());
+                        }
+                    });
+                    queue.add(jsonRequest);
                 }
             }
         }, new Response.ErrorListener() {

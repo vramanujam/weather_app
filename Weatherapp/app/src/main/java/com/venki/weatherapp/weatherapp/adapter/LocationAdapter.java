@@ -82,6 +82,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolders> /*imp
         System.out.println("cityName:" + cityName + " " + "position:" + position);
         holder.locationCity.setText(Html.fromHtml(locationObjects.get(position).getLocationCity()));
         holder.weatherInformation.setText(Html.fromHtml(locationObjects.get(position).getWeatherInformation()));
+        holder.tempMinMax.setText(Html.fromHtml(locationObjects.get(position).getTempMinMax()));
+        holder.currTimeView.setText(Html.fromHtml(locationObjects.get(position).getCurrTime()));
         holder.deleteText.setTag(R.id.TAG_KEY, String.valueOf(locationObjects.get(position).getId()));
 
         holder.deleteText.setOnClickListener(new View.OnClickListener() {

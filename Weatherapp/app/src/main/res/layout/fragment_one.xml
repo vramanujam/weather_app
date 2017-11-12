@@ -127,6 +127,16 @@
                     android:text="@string/humidity"/>
 
                 <TextView
+                    android:id="@+id/temp_min_max_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorWhite"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="@dimen/_14sdp"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:text="@string/humidity_rate"/>
+
+                <TextView
                     android:id="@+id/humidity_result"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

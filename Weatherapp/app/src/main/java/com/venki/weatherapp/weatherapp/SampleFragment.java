@@ -92,6 +92,11 @@ import android.view.ViewGroup;
 
     private CustomSharedPreference sharedPreference;
 
+
+    private TextView tempMinMaxView;
+
+    private String degreeMetric;
+
     //private String isLocationSaved;
 
     private DatabaseQuery query;
@@ -122,6 +127,7 @@ import android.view.ViewGroup;
         circleTitle = (CircleView)getView().findViewById(R.id.weather_result);
         windResult = (TextView)getView().findViewById(R.id.wind_result);
         humidityResult = (TextView)getView().findViewById(R.id.humidity_result);
+        tempMinMaxView = (TextView) getView().findViewById(R.id.temp_min_max_view);
 
         locationManager = (LocationManager) getActivity().getSystemService(Service.LOCATION_SERVICE);
         String currentLocation = null;
@@ -186,13 +192,28 @@ import android.view.ViewGroup;
 
                     String city = locationMapObject.getName() + ", " + locationMapObject.getSys().getCountry();
                     if(locationMapObject.getName().equals(query.getCurrentCity()))
-                        city += "(Current)";
+                        city += "\n" + "(You are here!)";
                     String todayDate = getTodayDateInStringFormat();
                     Long tempVal = Math.round(Math.floor(Double.parseDouble(locationMapObject.getMain().getTemp())));
-                    String weatherTemp = String.valueOf(tempVal) + "°";
+                    Long tempMin = Math.round(Math.floor(Double.parseDouble(locationMapObject.getMain().getTemp_min())));
+                    Long tempMax = Math.round(Math.floor(Double.parseDouble(locationMapObject.getMain().getTemp_max())));
+
+                    System.out.println("Degree preference in weather activity: " + query.getUserDegreeMetric() );
+
+                    degreeMetric = "C";
+
+                    if(query.getUserDegreeMetric().equals("Fahrenheit")) {
+                        tempVal = Helper.convertCelsiusToFahrenheit(tempVal);
+                        tempMin = Helper.convertCelsiusToFahrenheit(tempMin);
+                        tempMax = Helper.convertCelsiusToFahrenheit(tempMax);
+                        degreeMetric = "F";
+                    }
+                    String weatherTemp = String.valueOf(tempVal) + "°"  + degreeMetric;
                     String weatherDescription = Helper.capitalizeFirstLetter(locationMapObject.getWeather().get(0).getDescription());
                     String windSpeed = locationMapObject.getWind().getSpeed();
                     String humidityValue = locationMapObject.getMain().getHumudity();
+                    String tempMinMax = "Min Temp: " + String.valueOf(tempMin) + "<sup>o</sup>" + degreeMetric + "," + " " + "Max Temp: " + String.valueOf(tempMax) + "<sup>o</sup>" + degreeMetric + "";
+
 
                     //save location in database
                     if(apiUrl.contains("lat")){
@@ -205,6 +226,7 @@ import android.view.ViewGroup;
                     circleTitle.setSubtitleText(Html.fromHtml(weatherDescription).toString());
                     windResult.setText(Html.fromHtml(windSpeed) + " km/h");
                     humidityResult.setText(Html.fromHtml(humidityValue) + " %");
+                    tempMinMaxView.setText(Html.fromHtml(tempMinMax));
 
                     fiveDaysApiJsonObjectCall(locationMapObject.getName());
                 }
@@ -312,33 +334,34 @@ import android.view.ViewGroup;
                             String shortDay = convertTimeToDay(time);
                             String temp = weatherInfo.get(i).getMain().getTemp();
                             String tempMin = weatherInfo.get(i).getMain().getTemp_min();
+                            String tempMaximum = weatherInfo.get(i).getMain().getTemp_max();
 
                             if(convertTimeToDay(time).equals("Mon") && everyday[0] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin));
+                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin,tempMaximum));
                                 everyday[0] = 1;
                             }
                             if(convertTimeToDay(time).equals("Tue") && everyday[1] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin));
+                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin,tempMaximum));
                                 everyday[1] = 1;
                             }
                             if(convertTimeToDay(time).equals("Wed") && everyday[2] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin));
+                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin,tempMaximum));
                                 everyday[2] = 1;
                             }
                             if(convertTimeToDay(time).equals("Thu") && everyday[3] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin));
+                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin,tempMaximum));
                                 everyday[3] = 1;
                             }
                             if(convertTimeToDay(time).equals("Fri") && everyday[4] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin));
+                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin,tempMaximum));
                                 everyday[4] = 1;
                             }
                             if(convertTimeToDay(time).equals("Sat") && everyday[5] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin));
+                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin,tempMaximum));
                                 everyday[5] = 1;
                             }
                             if(convertTimeToDay(time).equals("Sun") && everyday[6] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin));
+                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin,tempMaximum));
                                 everyday[6] = 1;
                             }
                             recyclerViewAdapter = new RecyclerViewAdapter(getActivity(), daysOfTheWeek);
