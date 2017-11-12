@@ -16,9 +16,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -40,6 +42,7 @@ import com.github.pavlospt.CircleView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.venki.weatherapp.weatherapp.adapter.RecyclerViewAdapter;
+import com.venki.weatherapp.weatherapp.adapter.ThreedayViewAdapter;
 import com.venki.weatherapp.weatherapp.database.DatabaseQuery;
 import com.venki.weatherapp.weatherapp.entity.WeatherObject;
 import com.venki.weatherapp.weatherapp.helpers.CustomSharedPreference;
@@ -61,12 +64,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-    public class SampleFragment extends Fragment implements LocationListener {
+import org.joda.time.DateTimeComparator;
+import org.joda.time.DateTimeUtils;
+
+public class SampleFragment extends Fragment implements LocationListener {
     private static final String TAG = WeatherActivity.class.getSimpleName();
 
     private RecyclerView recyclerView;
 
     private RecyclerViewAdapter recyclerViewAdapter;
+
+    private RecyclerView threehourView;
+
+    private ThreedayViewAdapter threehourViewAdapter;
 
     private TextView cityCountry;
 
@@ -74,7 +84,7 @@ import android.view.ViewGroup;
 
     private ImageView weatherImage;
 
-    private CircleView circleTitle;
+    private TextView circleTitle;
 
     private TextView windResult;
 
@@ -94,6 +104,8 @@ import android.view.ViewGroup;
 
 
     private TextView tempMinMaxView;
+
+    private TextView weatherResultDescription;
 
     private String degreeMetric;
 
@@ -124,10 +136,11 @@ import android.view.ViewGroup;
         cityCountry = (TextView)getView().findViewById(R.id.city_country);
         currentDate = (TextView)getView().findViewById(R.id.current_date);
         weatherImage = (ImageView)getView().findViewById(R.id.weather_icon);
-        circleTitle = (CircleView)getView().findViewById(R.id.weather_result);
+        circleTitle = (TextView) getView().findViewById(R.id.weather_result);
         windResult = (TextView)getView().findViewById(R.id.wind_result);
         humidityResult = (TextView)getView().findViewById(R.id.humidity_result);
         tempMinMaxView = (TextView) getView().findViewById(R.id.temp_min_max_view);
+        weatherResultDescription = (TextView) getView().findViewById(R.id.weather_result_desc);
 
         locationManager = (LocationManager) getActivity().getSystemService(Service.LOCATION_SERVICE);
         String currentLocation = null;
@@ -171,11 +184,24 @@ import android.view.ViewGroup;
             }
         });*/
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 4);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 5,GridLayoutManager.VERTICAL, false);
 
         recyclerView = (RecyclerView)getView().findViewById(R.id.weather_daily_list);
         recyclerView.setLayoutManager(gridLayoutManager);
+        //recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, true));
         recyclerView.setHasFixedSize(true);
+
+
+        GridLayoutManager threehourgrid = new GridLayoutManager(getActivity(), 5,GridLayoutManager.VERTICAL, false);
+        threehourView = (RecyclerView)getView().findViewById(R.id.threehour_layout);
+        threehourView.setLayoutManager(threehourgrid);
+        threehourView.setHasFixedSize(true);
+        /*threehourView = (RecyclerView)getView().findViewById(R.id.threehour_layout);
+        threehourView.setLayoutManager(gridLayoutManager);
+        //recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, true));
+        threehourView.setHasFixedSize(true);*/
+
+
     }
     private void makeJsonObject(final String apiUrl){
         StringRequest stringRequest = new StringRequest(Request.Method.GET, apiUrl, new Response.Listener<String>() {
@@ -222,8 +248,9 @@ import android.view.ViewGroup;
                     // populate View data
                     cityCountry.setText(Html.fromHtml(city));
                     currentDate.setText(Html.fromHtml(todayDate));
-                    circleTitle.setTitleText(Html.fromHtml(weatherTemp).toString());
-                    circleTitle.setSubtitleText(Html.fromHtml(weatherDescription).toString());
+                    circleTitle.setText(Html.fromHtml(weatherTemp).toString());
+                    //circleTitle.setSubtitleText(Html.fromHtml(weatherDescription).toString());
+                    weatherResultDescription.setText("(" + Html.fromHtml(weatherDescription).toString() + ")");
                     windResult.setText(Html.fromHtml(windSpeed) + " km/h");
                     humidityResult.setText(Html.fromHtml(humidityValue) + " %");
                     tempMinMaxView.setText(Html.fromHtml(tempMinMax));
@@ -313,6 +340,7 @@ import android.view.ViewGroup;
     private void fiveDaysApiJsonObjectCall(String city){
         String apiUrl = "http://api.openweathermap.org/data/2.5/forecast?q="+city+ "&APPID="+Helper.API_KEY+"&units=metric";
         final List<WeatherObject> daysOfTheWeek = new ArrayList<WeatherObject>();
+        final List<WeatherObject> threeHourForecast = new ArrayList<WeatherObject>();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, apiUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -335,6 +363,15 @@ import android.view.ViewGroup;
                             String temp = weatherInfo.get(i).getMain().getTemp();
                             String tempMin = weatherInfo.get(i).getMain().getTemp_min();
                             String tempMaximum = weatherInfo.get(i).getMain().getTemp_max();
+                            System.out.println("Fivedays time" + time);
+
+                            if(isCurrentDate(time) == 0){
+                                String hour[] = time.split(" ");
+                                threeHourForecast.add(new WeatherObject(hour[1], R.drawable.small_weather_icon, temp, tempMin,tempMaximum));
+                                /*System.out.println("Current Day");
+                                System.out.println("time " + time);
+                                System.out.println("temp "+ temp);*/
+                            }
 
                             if(convertTimeToDay(time).equals("Mon") && everyday[0] < 1){
                                 daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin,tempMaximum));
@@ -366,6 +403,9 @@ import android.view.ViewGroup;
                             }
                             recyclerViewAdapter = new RecyclerViewAdapter(getActivity(), daysOfTheWeek);
                             recyclerView.setAdapter(recyclerViewAdapter);
+
+                            threehourViewAdapter = new ThreedayViewAdapter(getActivity(), threeHourForecast);
+                            threehourView.setAdapter(threehourViewAdapter);
                         }
                     }
                 }
@@ -384,14 +424,32 @@ import android.view.ViewGroup;
         String days = "";
         try {
             Date date = format.parse(time);
-            System.out.println("Our time " + date);
+            //System.out.println("Our time " + date);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             days = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault());
-            System.out.println("Our time " + days);
+            //System.out.println("Our time " + days);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return days;
+    }
+
+    public int isCurrentDate(String time)
+    {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:SSSS", Locale.getDefault());
+        try {
+            Date inputdate = format.parse(time);
+            Date currentDate = format.parse(format.format(new Date() ));
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(currentDate);
+            cal.add(Calendar.DATE, 1);
+            //System.out.println("isCurrentDate");
+            System.out.println(inputdate.toString() + " " + currentDate.toString());
+            return DateTimeComparator.getDateOnlyInstance().compare(inputdate,cal.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }

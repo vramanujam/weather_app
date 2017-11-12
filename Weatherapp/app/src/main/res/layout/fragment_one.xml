@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="8"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="1">
 
         <TextView
             android:id="@+id/city_country"
@@ -19,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/city_country"
-            android:textSize="@dimen/_24sdp"
+            android:textSize="@dimen/_21sdp"
             android:layout_marginTop="@dimen/_16sdp"
             android:textColor="@color/colorWhite"/>
 
@@ -40,12 +41,42 @@
             android:layout_gravity="center_horizontal"
             android:contentDescription="@string/app_name"
             android:src="@drawable/sun"
-            android:layout_marginTop="@dimen/_24sdp"/>
+            android:layout_marginTop="@dimen/_18sdp"/>
 
-        <com.github.pavlospt.CircleView
+         <TextView
             android:id="@+id/weather_result"
-            android:layout_width="@dimen/_150sdp"
-            android:layout_height="@dimen/_150sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text=""
+            android:textSize="@dimen/_18sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/weather_result_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text=""
+            android:textSize="@dimen/_14sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:textColor="@color/colorWhite"/>
+
+        <TextView
+            android:id="@+id/temp_min_max_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:text="@string/humidity_rate"/>
+
+        <!-- <com.github.pavlospt.CircleView
+            android:id="@+id/weather_result"
+            android:layout_width="147dp"
+            android:layout_height="88dp"
             android:layout_marginTop="@dimen/_8sdp"
             app:cv_titleSubtitleSpace="40"
             app:cv_fillColor="@color/colorBackground"
@@ -56,7 +87,7 @@
             app:cv_titleText="@string/current_temperature"
             app:cv_subtitleSize="@dimen/_12sdp"
             app:cv_subtitleText="@string/weather_information"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal" /> -->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -126,7 +157,7 @@
                     android:textStyle="bold"
                     android:text="@string/humidity"/>
 
-                <TextView
+                <!-- <TextView
                     android:id="@+id/temp_min_max_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -134,7 +165,7 @@
                     android:layout_gravity="center_horizontal"
                     android:textSize="@dimen/_14sdp"
                     android:layout_marginTop="@dimen/_4sdp"
-                    android:text="@string/humidity_rate"/>
+                    android:text="@string/humidity_rate"/> -->
 
                 <TextView
                     android:id="@+id/humidity_result"
@@ -158,13 +189,46 @@
         android:layout_weight="2"
         android:background="@color/colorBottomBackground"
         android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Three Hour Forecast"
+            android:textSize="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:textColor="@color/colorWhite"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/threehour_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:scrollbars="none"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:background="@color/colorBottomBackground"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Five day Forecast"
+            android:textSize="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:textColor="@color/colorWhite"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/weather_daily_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:scrollbars="none"/>
 
     </LinearLayout>

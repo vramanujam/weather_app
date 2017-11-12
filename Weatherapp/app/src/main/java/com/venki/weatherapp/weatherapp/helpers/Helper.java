@@ -19,9 +19,9 @@ public class Helper {
 
     public static final String LOCATION_PREFS = "location_prefs";
 
-    public static final String API_KEY = "";
+    public static final String API_KEY = "bad2095b13c85ff8faf06c3226f11706";
 
-    public static final String TIMEZONE_API_KEY = "";
+    public static final String TIMEZONE_API_KEY = "AIzaSyCVJgavv_J2EpKMvFf16AzzmejkvpxoaVI";
 
     public static String capitalizeFirstLetter(String original) {
         if (original == null || original.length() == 0) {
