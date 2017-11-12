@@ -61,7 +61,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class SampleFragment extends Fragment implements LocationListener {
+    public class SampleFragment extends Fragment implements LocationListener {
     private static final String TAG = WeatherActivity.class.getSimpleName();
 
     private RecyclerView recyclerView;
@@ -185,6 +185,8 @@ public class SampleFragment extends Fragment implements LocationListener {
                     Toast.makeText(getActivity(), "Response Good", Toast.LENGTH_LONG).show();
 
                     String city = locationMapObject.getName() + ", " + locationMapObject.getSys().getCountry();
+                    if(locationMapObject.getName().equals(query.getCurrentCity()))
+                        city += "(Current)";
                     String todayDate = getTodayDateInStringFormat();
                     Long tempVal = Math.round(Math.floor(Double.parseDouble(locationMapObject.getMain().getTemp())));
                     String weatherTemp = String.valueOf(tempVal) + "°";

@@ -37,12 +37,18 @@
         android:layout_height="wrap_content"
         android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
         />
-
+    <Button
+        android:layout_width="match_parent"
+        android:id="@+id/add_current_location"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_location"
+        android:layout_alignParentLeft="true"
+        android:text="Click here to add current location" />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/location_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/add_location"
+        android:layout_below="@+id/add_current_location"
         android:layout_centerHorizontal="true"
         android:orientation="vertical"
         android:scrollbars="none"/>

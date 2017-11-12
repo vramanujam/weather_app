@@ -20,6 +20,13 @@ public class DatabaseQuery extends DatabaseObject{
         super(context);
     }
 
+    public void createTablesRequired()
+    {
+        String query = "CREATE TABLE IF NOT EXISTS currentlocation( id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)";
+        Cursor cursor = this.getDbConnection().rawQuery(query, null);
+        cursor.close();
+    }
+
     public List<DatabaseLocationObject> getStoredDataLocations(){
         List<DatabaseLocationObject> allLocations = new ArrayList<DatabaseLocationObject>();
         String query = "Select * from data";
@@ -35,6 +42,19 @@ public class DatabaseQuery extends DatabaseObject{
         }
         cursor.close();
         return allLocations;
+    }
+
+    public String getCurrentCity(){
+        //SELECT * FROM Table LIMIT 10 OFFSET 0
+        String city = null;
+        String query = "Select name from currentlocation limit 1 offset 0";
+        Cursor cursor = this.getDbConnection().rawQuery(query, null);
+        if(cursor.moveToFirst()){
+            city = cursor.getString(0);
+        }
+        cursor.close();
+
+        return city;
     }
 
     public String getCityByRowNum(int row){
@@ -94,6 +114,16 @@ public class DatabaseQuery extends DatabaseObject{
         return false;
     }
 
+    private boolean isCurrentLocationExist(String location){
+        String query = "Select * from currentlocation where name=" + "'"+location+"'";
+        Cursor cursor = this.getDbConnection().rawQuery(query, null);
+        if(cursor.moveToFirst()){
+            return true;
+        }
+        cursor.close();
+        return false;
+    }
+
     public boolean insertNewLocation(String cityCountry){
         ContentValues values = new ContentValues();
         boolean bret = false;
@@ -106,6 +136,15 @@ public class DatabaseQuery extends DatabaseObject{
         return bret;
     }
 
+    public boolean insertCurrentLocation(String cityName){
+        ContentValues values = new ContentValues();
+        boolean bret = false;
+        values.put("id",1);
+        values.put("name", cityName);
+        getDbConnection().replace("currentlocation",null,values);
+        //getDbConnection().close();
+        return bret;
+    }
     public boolean deleteLocation(int locationId){
         return getDbConnection().delete(TABLE_NAME, KEY_NAME + "=" + locationId, null) > 0;
     }

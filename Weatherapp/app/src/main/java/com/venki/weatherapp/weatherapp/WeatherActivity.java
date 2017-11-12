@@ -225,7 +225,7 @@ public class WeatherActivity extends AppCompatActivity implements LocationListen
                     //make api call
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 2, this);
                     if (locationManager != null) {
-                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                         apiUrl = "http://api.openweathermap.org/data/2.5/weather?lat="+location.getLatitude()+"&lon="+location.getLongitude()+"&APPID="+Helper.API_KEY+"&units=metric";
                         makeJsonObject(apiUrl);
                     }else{
