@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -84,9 +85,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         requestQueue = Volley.newRequestQueue(MainActivity.this);
         completeCityWeatherData = new ArrayList<CityLocationData>();
-
-        //query = new DatabaseQuery(MainActivity.this);
-        //query.insertNewLocation("chennai");
         dbQuery = new DatabaseQuery(MainActivity.this);
 
         locationManager = (LocationManager) getSystemService(Service.LOCATION_SERVICE);
@@ -108,11 +106,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         if(null != locationData){
             for(int i = 0; i < locationData.size(); i++){
-                // make volley network call here
-                System.out.println("Response printing " + locationData.get(i).getLocation());
-                System.out.println("row id:"+dbQuery.getRowNumber(locationData.get(i).getLocation()));
-                System.out.println("City by rownum " + dbQuery.getCityByRowNum(dbQuery.getRowNumber(locationData.get(i).getLocation())));
-                requestJsonObject(locationData.get(i));
+                getWeatherData(locationData.get(i));
             }
         }
 
@@ -132,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     if(null != locationData){
                         for(int i = 0; i < locationData.size(); i++){
                             System.out.println("Response printing " + locationData.get(i).getLocation());
-                            requestJsonObject(locationData.get(i));
+                            getWeatherData(locationData.get(i));
                         }
                     }
                 }
@@ -162,8 +156,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
                     if(null != locationData){
                         for(int i = 0; i < locationData.size(); i++){
-                            System.out.println("Response printing " + locationData.get(i).getLocation());
-                            requestJsonObject(locationData.get(i));
+                            getWeatherData(locationData.get(i));
                         }
                     }
                 }
@@ -176,18 +169,31 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         locationRecyclerView = (RecyclerView) findViewById(R.id.location_list);
         locationRecyclerView.setLayoutManager(linearLayoutManager);
     }
-	
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 200) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    System.out.println("Requested granted");
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 2, this);
+                    if (locationManager != null) {
+                        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        String apiUrl = "http://api.openweathermap.org/data/2.5/weather?lat="+location.getLatitude()+"&lon="+location.getLongitude()+"&APPID="+Helper.API_KEY+"&units=metric";
+                        updateLocationinDB(apiUrl);
+                    }
+                }
+            }
+        }
+    }
 	//--
 	 @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
          int current_selected_id = R.id.menu_centigrade;
          if(dbQuery.getUserDegreeMetric().equals("Fahrenheit"))
              current_selected_id = R.id.menu_fahrenheit ;
          MenuItem refresh = menu.findItem(current_selected_id);
          refresh.setChecked(true);
-         //refresh.setEnabled(true);
         return true;
     }
 
@@ -207,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     for (int i = 0; i < locationData.size(); i++) {
                         // make volley network call here
                         System.out.println("Response printing " + locationData.get(i).getLocation());
-                        requestJsonObject(locationData.get(i));
+                        getWeatherData(locationData.get(i));
                     }
                 }
                 return true;
@@ -222,9 +228,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
                 if (null != locationData) {
                     for (int i = 0; i < locationData.size(); i++) {
-                        // make volley network call here
                         System.out.println("Response printing " + locationData.get(i).getLocation());
-                        requestJsonObject(locationData.get(i));
+                        getWeatherData(locationData.get(i));
                     }
                 }
                 return true;
@@ -239,7 +244,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     private void updateLocationinDB(String  url){
-        //String url ="http://api.openweathermap.org/data/2.5/weather?q="+paramValue.getLocation()+"&APPID="+ Helper.API_KEY+"&units=metric";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -264,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         requestQueue.add(stringRequest);
     }
 
-    private void requestJsonObject(final DbLocationObj paramValue){
+    private void getWeatherData(final DbLocationObj paramValue){
         String url ="http://api.openweathermap.org/data/2.5/weather?q="+paramValue.getLocation()+"&APPID="+ Helper.API_KEY+"&units=metric";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override

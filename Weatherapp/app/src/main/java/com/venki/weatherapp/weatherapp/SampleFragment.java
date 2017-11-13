@@ -57,7 +57,6 @@ import android.view.ViewGroup;
 import org.joda.time.DateTimeComparator;
 
 public class SampleFragment extends Fragment implements LocationListener {
-    private static final String TAG = SampleFragment.class.getSimpleName();
 
     private RecyclerView recyclerView;
 
@@ -73,11 +72,11 @@ public class SampleFragment extends Fragment implements LocationListener {
 
     private ImageView weatherImage;
 
-    private TextView circleTitle;
+    private TextView mainTemp;
 
-    private TextView windResult;
+    private TextView currentWindSpeed;
 
-    private TextView humidityResult;
+    private TextView moisture;
 
     private RequestQueue queue;
 
@@ -95,13 +94,9 @@ public class SampleFragment extends Fragment implements LocationListener {
 
     private String degreeMetric;
 
-    //private String isLocationSaved;
-
     private DatabaseQuery query;
 
     private String apiUrl;
-
-    private FiveDaysForecast fiveDaysForecast;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -118,9 +113,9 @@ public class SampleFragment extends Fragment implements LocationListener {
         cityCountry = (TextView)getView().findViewById(R.id.city_country);
         currentDate = (TextView)getView().findViewById(R.id.current_date);
         weatherImage = (ImageView)getView().findViewById(R.id.weather_icon);
-        circleTitle = (TextView) getView().findViewById(R.id.weather_result);
-        windResult = (TextView)getView().findViewById(R.id.wind_result);
-        humidityResult = (TextView)getView().findViewById(R.id.humidity_result);
+        mainTemp = (TextView) getView().findViewById(R.id.weather_result);
+        currentWindSpeed = (TextView)getView().findViewById(R.id.wind_result);
+        moisture = (TextView)getView().findViewById(R.id.humidity_result);
         tempMinMaxView = (TextView) getView().findViewById(R.id.temp_min_max_view);
         weatherResultDescription = (TextView) getView().findViewById(R.id.weather_result_desc);
 
@@ -136,35 +131,23 @@ public class SampleFragment extends Fragment implements LocationListener {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         } else {
             if(currentLocation == null){
-                // make API call with longitude and latitude
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 2, this);
                 if (locationManager != null) {
                     location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     apiUrl = "http://api.openweathermap.org/data/2.5/weather?lat="+location.getLatitude()+"&lon="+location.getLongitude()+"&APPID="+Helper.API_KEY+"&units=metric";
-                    makeJsonObject(apiUrl);
+                    getWeatherData(apiUrl);
                 }
             }else{
                 // make API call with city name
-                //String storedCityName = sharedPreference.getLocationInPreference();
-                //String storedCityName = "Enugu";
                 System.out.println("Stored city " + currentLocation);
                 String[] city = currentLocation.split(",");
                 if(!TextUtils.isEmpty(city[0])){
                     System.out.println("Stored city " + city[0]);
                     String url ="http://api.openweathermap.org/data/2.5/weather?q="+city[0]+"&APPID="+Helper.API_KEY+"&units=metric";
-                    makeJsonObject(url);
+                    getWeatherData(url);
                 }
             }
         }
-
-        /*ImageButton addLocation = (ImageButton) findViewById(R.id.add_location);
-        addLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent addLocationIntent = new Intent(WeatherActivity.this, AddLocationActivity.class);
-                startActivity(addLocationIntent);
-            }
-        });*/
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 5,GridLayoutManager.VERTICAL, false);
 
@@ -178,11 +161,10 @@ public class SampleFragment extends Fragment implements LocationListener {
         threehourView.setHasFixedSize(true);
 
     }
-    private void makeJsonObject(final String apiUrl){
+    private void getWeatherData(final String apiUrl){
         StringRequest stringRequest = new StringRequest(Request.Method.GET, apiUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Response " + response);
                 GsonBuilder builder = new GsonBuilder();
                 Gson gson = builder.create();
                 locationMapObject = gson.fromJson(response, LocationMapObject.class);
@@ -225,20 +207,20 @@ public class SampleFragment extends Fragment implements LocationListener {
                     // populate View data
                     cityCountry.setText(Html.fromHtml(city));
                     currentDate.setText(Html.fromHtml(todayDate));
-                    circleTitle.setText(Html.fromHtml(weatherTemp).toString());
+                    mainTemp.setText(Html.fromHtml(weatherTemp).toString());
                     //circleTitle.setSubtitleText(Html.fromHtml(weatherDescription).toString());
                     weatherResultDescription.setText("(" + Html.fromHtml(weatherDescription).toString() + ")");
-                    windResult.setText(Html.fromHtml(windSpeed) + " m/s");
-                    humidityResult.setText(Html.fromHtml(humidityValue) + " %");
+                    currentWindSpeed.setText(Html.fromHtml(windSpeed) + " m/s");
+                    moisture.setText(Html.fromHtml(humidityValue) + " %");
                     tempMinMaxView.setText(Html.fromHtml(tempMinMax));
                     new ImageLoader("http://openweathermap.org/img/w/" + icon + ".png", weatherImage).execute();
-                    fiveDaysApiJsonObjectCall(locationMapObject.getName());
+                    getThreeHourAndFiveDaysForecast(locationMapObject.getName());
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "Error " + error.getMessage());
+
             }
         });
         queue.add(stringRequest);
@@ -250,16 +232,7 @@ public class SampleFragment extends Fragment implements LocationListener {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
 
                 if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    //make api call
-                    /*locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 2, this);
-                    if (locationManager != null) {
-                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                        apiUrl = "http://api.openweathermap.org/data/2.5/weather?lat="+location.getLatitude()+"&lon="+location.getLongitude()+"&APPID="+Helper.API_KEY+"&units=metric";
-                        makeJsonObject(apiUrl);
-                    }else{
-                        apiUrl = "http://api.openweathermap.org/data/2.5/weather?lat=51.5074&lon=0.1278&APPID="+Helper.API_KEY+"&units=metric";
-                        makeJsonObject(apiUrl);
-                    }*/
+
                 }
             }
         }
@@ -312,29 +285,25 @@ public class SampleFragment extends Fragment implements LocationListener {
         return df.format(c.getTime());
     }
 
-    private void fiveDaysApiJsonObjectCall(String city){
+    private void getThreeHourAndFiveDaysForecast(String city){
         String apiUrl = "http://api.openweathermap.org/data/2.5/forecast?q="+city+ "&APPID="+Helper.API_KEY+"&units=metric";
         final List<CityWeatherData> daysOfTheWeek = new ArrayList<CityWeatherData>();
         final List<CityWeatherData> threeHourForecast = new ArrayList<CityWeatherData>();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, apiUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "Response 5 days" + response);
                 GsonBuilder builder = new GsonBuilder();
                 Gson gson = builder.create();
                 Forecast forecast = gson.fromJson(response, Forecast.class);
                 if (null == forecast) {
                     Toast.makeText(getActivity().getApplicationContext(), "Nothing was returned", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "Response Good", Toast.LENGTH_LONG).show();
-
-                    int[] everyday = new int[]{0,0,0,0,0,0,0};
-
                     List<FiveWeathers> weatherInfo = forecast.getList();
+                    boolean[] flag = new boolean[]{false,false,false,false,false,false,false};
                     if(null != weatherInfo){
                         for(int i = 0; i < weatherInfo.size(); i++){
                             String time = weatherInfo.get(i).getDt_txt();
-                            String shortDay = convertTimeToDay(time);
+                            String shortDay = getDay(time);
                             String temp = weatherInfo.get(i).getMain().getTemp();
                             String tempMin = weatherInfo.get(i).getMain().getTemp_min();
                             String tempMaximum = weatherInfo.get(i).getMain().getTemp_max();
@@ -343,39 +312,40 @@ public class SampleFragment extends Fragment implements LocationListener {
                             if(isCurrentDate(time) == 0){
                                 String hour[] = time.split(" ");
 
-                                if(weatherInfo.get(i).getConditions().get(0).getDescription() != null)
+                                if(weatherInfo.get(i).getConditions().get(0).getDescription() != null) {
                                     System.out.println("Weather info is null " + weatherInfo.get(i).getConditions().get(0).getDescription());
-                                String icon = weatherInfo.get(i).getConditions().get(0).getIcon();
-                                threeHourForecast.add(new CityWeatherData(hour[1], icon, temp, weatherInfo.get(i).getConditions().get(0).getMain(),tempMaximum));
+                                    String icon = weatherInfo.get(i).getConditions().get(0).getIcon();
+                                    threeHourForecast.add(new CityWeatherData(hour[1], icon, temp, weatherInfo.get(i).getConditions().get(0).getMain(),tempMaximum));
+                                }
                             }
 
-                            if(convertTimeToDay(time).equals("Mon") && everyday[0] < 1){
+                            if(getDay(time).equals("Mon") && !flag[0]){
                                 daysOfTheWeek.add(new CityWeatherData(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
-                                everyday[0] = 1;
+                                flag[0] = true;
                             }
-                            if(convertTimeToDay(time).equals("Tue") && everyday[1] < 1){
+                            if(getDay(time).equals("Tue") && !flag[1]){
                                 daysOfTheWeek.add(new CityWeatherData(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
-                                everyday[1] = 1;
+                                flag[1] = true;
                             }
-                            if(convertTimeToDay(time).equals("Wed") && everyday[2] < 1){
+                            if(getDay(time).equals("Wed") && !flag[2]){
                                 daysOfTheWeek.add(new CityWeatherData(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
-                                everyday[2] = 1;
+                                flag[2] = true;
                             }
-                            if(convertTimeToDay(time).equals("Thu") && everyday[3] < 1){
+                            if(getDay(time).equals("Thu") && !flag[3]){
                                 daysOfTheWeek.add(new CityWeatherData(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
-                                everyday[3] = 1;
+                                flag[3] = true;
                             }
-                            if(convertTimeToDay(time).equals("Fri") && everyday[4] < 1){
+                            if(getDay(time).equals("Fri") && !flag[4]){
                                 daysOfTheWeek.add(new CityWeatherData(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
-                                everyday[4] = 1;
+                                flag[4] = true;
                             }
-                            if(convertTimeToDay(time).equals("Sat") && everyday[5] < 1){
+                            if(getDay(time).equals("Sat") && !flag[5]){
                                 daysOfTheWeek.add(new CityWeatherData(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
-                                everyday[5] = 1;
+                                flag[5] = true;
                             }
-                            if(convertTimeToDay(time).equals("Sun") && everyday[6] < 1){
+                            if(getDay(time).equals("Sun") && !flag[6]){
                                 daysOfTheWeek.add(new CityWeatherData(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
-                                everyday[6] = 1;
+                                flag[6] = true;
                             }
                             cityViewFiveDayAdapter = new CityViewFiveDayAdapter(getActivity(), daysOfTheWeek);
                             recyclerView.setAdapter(cityViewFiveDayAdapter);
@@ -389,22 +359,20 @@ public class SampleFragment extends Fragment implements LocationListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d(TAG, "Error " + error.getMessage());
+                
             }
         });
         queue.add(stringRequest);
     }
 
-    private String convertTimeToDay(String time){
+    private String getDay(String time){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:SSSS", Locale.getDefault());
         String days = "";
         try {
             Date date = format.parse(time);
-            //System.out.println("Our time " + date);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             days = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault());
-            //System.out.println("Our time " + days);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -413,7 +381,6 @@ public class SampleFragment extends Fragment implements LocationListener {
 
     public int isCurrentDate(String time)
     {
-
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:SSSS", Locale.getDefault());
         try {
             Date inputdate = format.parse(time);
@@ -421,8 +388,6 @@ public class SampleFragment extends Fragment implements LocationListener {
             Calendar cal = Calendar.getInstance();
             cal.setTime(currentDate);
             cal.add(Calendar.DATE, 1);
-            //System.out.println("isCurrentDate");
-            System.out.println(inputdate.toString() + " " + currentDate.toString());
             return DateTimeComparator.getDateOnlyInstance().compare(inputdate,cal.getTime());
         } catch (ParseException e) {
             e.printStackTrace();
