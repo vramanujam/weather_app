@@ -12,22 +12,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,12 +32,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.venki.weatherapp.weatherapp.adapter.RecyclerViewAdapter;
-import com.venki.weatherapp.weatherapp.adapter.SpacesItemDecoration;
-import com.venki.weatherapp.weatherapp.adapter.ThreedayViewAdapter;
+import com.venki.weatherapp.weatherapp.adapter.CityViewFiveDayAdapter;
+import com.venki.weatherapp.weatherapp.adapter.ThreeHourViewAdapter;
 import com.venki.weatherapp.weatherapp.database.DatabaseQuery;
 import com.venki.weatherapp.weatherapp.entity.WeatherObject;
-import com.venki.weatherapp.weatherapp.helpers.CustomSharedPreference;
 import com.venki.weatherapp.weatherapp.helpers.Helper;
 import com.venki.weatherapp.weatherapp.helpers.ImageLoadTask;
 import com.venki.weatherapp.weatherapp.json.FiveDaysForecast;
@@ -71,11 +61,11 @@ public class SampleFragment extends Fragment implements LocationListener {
 
     private RecyclerView recyclerView;
 
-    private RecyclerViewAdapter recyclerViewAdapter;
+    private CityViewFiveDayAdapter cityViewFiveDayAdapter;
 
     private RecyclerView threehourView;
 
-    private ThreedayViewAdapter threehourViewAdapter;
+    private ThreeHourViewAdapter threehourViewAdapter;
 
     private TextView cityCountry;
 
@@ -99,9 +89,6 @@ public class SampleFragment extends Fragment implements LocationListener {
 
     private final int REQUEST_LOCATION = 200;
 
-    private CustomSharedPreference sharedPreference;
-
-
     private TextView tempMinMaxView;
 
     private TextView weatherResultDescription;
@@ -124,10 +111,6 @@ public class SampleFragment extends Fragment implements LocationListener {
 
         queue = Volley.newRequestQueue(getActivity());
         query = new DatabaseQuery(getActivity());
-        sharedPreference = new CustomSharedPreference(getActivity());
-        //isLocationSaved = sharedPreference.getLocationInPreference();
-
-
         return rootView;
     }
 
@@ -187,22 +170,12 @@ public class SampleFragment extends Fragment implements LocationListener {
 
         recyclerView = (RecyclerView)getView().findViewById(R.id.weather_daily_list);
         recyclerView.setLayoutManager(gridLayoutManager);
-        //recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, true));
         recyclerView.setHasFixedSize(true);
 
-
-        GridLayoutManager threehourgrid = new GridLayoutManager(getActivity(), 1,GridLayoutManager.HORIZONTAL, false);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen._1sdp);
         threehourView = (RecyclerView)getView().findViewById(R.id.threehour_layout);
-        threehourView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
         threehourView.setLayoutManager(layoutManager);
         threehourView.setHasFixedSize(true);
-        /*threehourView = (RecyclerView)getView().findViewById(R.id.threehour_layout);
-        threehourView.setLayoutManager(gridLayoutManager);
-        //recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, true));
-        threehourView.setHasFixedSize(true);*/
-
 
     }
     private void makeJsonObject(final String apiUrl){
@@ -404,10 +377,10 @@ public class SampleFragment extends Fragment implements LocationListener {
                                 daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
                                 everyday[6] = 1;
                             }
-                            recyclerViewAdapter = new RecyclerViewAdapter(getActivity(), daysOfTheWeek);
-                            recyclerView.setAdapter(recyclerViewAdapter);
+                            cityViewFiveDayAdapter = new CityViewFiveDayAdapter(getActivity(), daysOfTheWeek);
+                            recyclerView.setAdapter(cityViewFiveDayAdapter);
 
-                            threehourViewAdapter = new ThreedayViewAdapter(getActivity(), threeHourForecast);
+                            threehourViewAdapter = new ThreeHourViewAdapter(getActivity(), threeHourForecast);
                             threehourView.setAdapter(threehourViewAdapter);
                         }
                     }
@@ -440,6 +413,7 @@ public class SampleFragment extends Fragment implements LocationListener {
 
     public int isCurrentDate(String time)
     {
+
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:SSSS", Locale.getDefault());
         try {
             Date inputdate = format.parse(time);

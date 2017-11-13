@@ -8,57 +8,42 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
 
 import com.venki.weatherapp.weatherapp.R;
 import com.venki.weatherapp.weatherapp.cityview;
 import com.venki.weatherapp.weatherapp.database.DatabaseQuery;
 import com.venki.weatherapp.weatherapp.entity.LocationObject;
-import com.venki.weatherapp.weatherapp.entity.ViewEntityObject;
-import com.venki.weatherapp.weatherapp.helpers.CustomSharedPreference;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class LocationAdapter extends RecyclerView.Adapter<LocationHolders> /*implements CompoundButton.OnCheckedChangeListener*/{
+public class CityListAdapter extends RecyclerView.Adapter<CityListHolders> /*implements CompoundButton.OnCheckedChangeListener*/{
 
     private List<LocationObject> locationObjects;
 
     protected Context context;
 
-    private List<ViewEntityObject> allRadioButton;
+    private DatabaseQuery dbQuery;
 
-    private DatabaseQuery query;
-
-    int[] idList = new int[]{R.id.button0, R.id.button1, R.id.button2, R.id.button3, R.id.button4};
-
-    private CustomSharedPreference sharedPreference;
-
-
-    public LocationAdapter(Context context, List<LocationObject> locationObjects) {
+    public CityListAdapter(Context context, List<LocationObject> locationObjects) {
         this.locationObjects = locationObjects;
         this.context = context;
-        allRadioButton = new ArrayList<ViewEntityObject>();
-        query = new DatabaseQuery(context);
-        sharedPreference = new CustomSharedPreference(context);
+        dbQuery = new DatabaseQuery(context);
     }
 
     @Override
-    public LocationHolders onCreateViewHolder(ViewGroup parent, int viewType) {
-        LocationHolders viewHolder = null;
+    public CityListHolders onCreateViewHolder(ViewGroup parent, int viewType) {
+        CityListHolders viewHolder = null;
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.city_list_view, parent, false);
-        viewHolder = new LocationHolders(layoutView, locationObjects);
+        viewHolder = new CityListHolders(layoutView, locationObjects);
         return viewHolder;
     }
 
     public int getLocationIndex(String cityName)
     {
-        System.out.println("removeLocation");
         int index = 0;
         for(LocationObject L: locationObjects){
             System.out.println(L.getLocationCity() + " " + cityName);
             if(L.getLocationCity().equals(cityName)){
-                //locationObjects.remove(index);
                 return index;
             }
             index++;
@@ -68,12 +53,12 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolders> /*imp
     public void removeLocation(String cityName){
         int Index = getLocationIndex(cityName);
         int databaseIndex = locationObjects.get(Index).getId();
-        query.deleteLocation(databaseIndex);
+        dbQuery.deleteLocation(databaseIndex);
         locationObjects.remove(Index);
         notifyItemRemoved(Index);
     }
     @Override
-    public void onBindViewHolder(final LocationHolders holder, final int position) {
+    public void onBindViewHolder(final CityListHolders holder, final int position) {
 
         final String cityName = locationObjects.get(position).getLocationCity();
         System.out.println("cityName:" + cityName + " " + "position:" + position);
@@ -101,23 +86,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolders> /*imp
         holder.weatherInformation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(context, "should change", Toast.LENGTH_LONG).show();
                 Intent addLocationIntent = new Intent(context, cityview.class);
                 addLocationIntent.putExtra("city",cityName);
                 context.startActivity(addLocationIntent);
             }
-        });
-        String buttonId = sharedPreference.getLocationInPreference();
-        System.out.println("Stored id " + buttonId);
-
-        //holder.selectableRadioButton.setOnCheckedChangeListener(this);
-        //setRadioButtonId(holder.selectableRadioButton, position);
-        //allRadioButton.add(new ViewEntityObject(holder.selectableRadioButton, locationObjects.get(position).getLocationCity()));
-
-        //String storedCityLocation = sharedPreference.getLocationInPreference();
-        //if(allRadioButton.get(position).getRadioName().equals(storedCityLocation)){
-        //    holder.selectableRadioButton.setChecked(true);
-        //}
+        });;
 
     }
 
@@ -126,38 +99,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolders> /*imp
         return this.locationObjects.size();
     }
 
-    /*@Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-        if(isChecked){
-            RadioButton radioButton = (RadioButton)compoundButton;
-            int checkedRadioId = radioButton.getId();
-            for(int i = 0; i < allRadioButton.size(); i++){
-                if(allRadioButton.get(i).getRadioButton().getId() != checkedRadioId){
-                    allRadioButton.get(i).getRadioButton().setChecked(false);
-                }else{
-                    String name = allRadioButton.get(i).getRadioName();
-                    sharedPreference.setLocationInPreference(name);
-                }
-            }
-        }
 
-    }*/
 
-    private void setRadioButtonId(RadioButton mButton, int position){
-        if(position == 0){
-            mButton.setId(idList[position]);
-        }
-        if(position == 1){
-            mButton.setId(idList[position]);
-        }
-        if(position == 2){
-            mButton.setId(idList[position]);
-        }
-        if(position == 3){
-            mButton.setId(idList[position]);
-        }
-        if(position == 4){
-            mButton.setId(idList[position]);
-        }
-    }
 }

@@ -106,18 +106,9 @@ public class DatabaseQuery extends DatabaseObject{
         System.out.println("getRowNumber " + rownum + " " + Location );
         return rownum;
     }
+
     private boolean isLocationExist(String location){
         String query = "Select * from data where cotent=" + "'"+location+"'";
-        Cursor cursor = this.getDbConnection().rawQuery(query, null);
-        if(cursor.moveToFirst()){
-            return true;
-        }
-        cursor.close();
-        return false;
-    }
-
-    private boolean isCurrentLocationExist(String location){
-        String query = "Select * from currentlocation where name=" + "'"+location+"'";
         Cursor cursor = this.getDbConnection().rawQuery(query, null);
         if(cursor.moveToFirst()){
             return true;
@@ -169,15 +160,5 @@ public class DatabaseQuery extends DatabaseObject{
     }
     public boolean deleteLocation(int locationId){
         return getDbConnection().delete(TABLE_NAME, KEY_NAME + "=" + locationId, null) > 0;
-    }
-
-    public void deleteLocation(String location){
-        String query = "delete from data where cotent=" + "'"+location+"'";
-        Cursor cursor = this.getDbConnection().rawQuery(query, null);
-        cursor.close();
-    }
-
-    public void deleteAllLocationContent(){
-        getDbConnection().execSQL("delete from " + TABLE_NAME);
     }
 }

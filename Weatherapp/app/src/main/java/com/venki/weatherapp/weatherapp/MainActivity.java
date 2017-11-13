@@ -2,9 +2,7 @@ package com.venki.weatherapp.weatherapp;
 
 import android.Manifest;
 import android.app.Service;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -19,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -36,7 +33,7 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.venki.weatherapp.weatherapp.adapter.LocationAdapter;
+import com.venki.weatherapp.weatherapp.adapter.CityListAdapter;
 import com.venki.weatherapp.weatherapp.database.DatabaseQuery;
 import com.venki.weatherapp.weatherapp.entity.DatabaseLocationObject;
 import com.venki.weatherapp.weatherapp.entity.LocationObject;
@@ -49,33 +46,27 @@ import org.json.JSONObject;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
-    private static final String TAG = MainActivity.class.getSimpleName();
 
-    private DatabaseQuery query;
+    private List<DatabaseLocationObject> locationData;
 
-    private List<DatabaseLocationObject> allLocations;
+    private List<LocationObject> completeCityWeatherData;
 
-    private LocationObject locationObject;
+    private CityListAdapter cityListAdapter;
 
-    private LocationMapObject locationMapObject;
-
-    private RequestQueue queue;
-
-    private List<LocationObject> allData;
-
-    private LocationAdapter locationAdapter;
+    private LocationMapObject jsonLocationObject;
 
     private RecyclerView locationRecyclerView;
 
-    private LocationManager locationManager;
+    private DatabaseQuery dbQuery;
 
-    private String provider;
+    private RequestQueue requestQueue;
+
+    private LocationManager locationManager;
 
     private Location location;
 	
@@ -91,12 +82,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         setTitle("City List View");
 
-        queue = Volley.newRequestQueue(MainActivity.this);
-        allData = new ArrayList<LocationObject>();
+        requestQueue = Volley.newRequestQueue(MainActivity.this);
+        completeCityWeatherData = new ArrayList<LocationObject>();
 
         //query = new DatabaseQuery(MainActivity.this);
         //query.insertNewLocation("chennai");
-        query = new DatabaseQuery(MainActivity.this);
+        dbQuery = new DatabaseQuery(MainActivity.this);
 
         locationManager = (LocationManager) getSystemService(Service.LOCATION_SERVICE);
 
@@ -113,15 +104,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
 
         //query.deleteAllLocationContent();
-        allLocations = query.getStoredDataLocations();
+        locationData = dbQuery.getStoredDataLocations();
 
-        if(null != allLocations){
-            for(int i = 0; i < allLocations.size(); i++){
+        if(null != locationData){
+            for(int i = 0; i < locationData.size(); i++){
                 // make volley network call here
-                System.out.println("Response printing " + allLocations.get(i).getLocation());
-                System.out.println("row id:"+query.getRowNumber(allLocations.get(i).getLocation()));
-                System.out.println("City by rownum " + query.getCityByRowNum(query.getRowNumber(allLocations.get(i).getLocation())));
-                requestJsonObject(allLocations.get(i));
+                System.out.println("Response printing " + locationData.get(i).getLocation());
+                System.out.println("row id:"+dbQuery.getRowNumber(locationData.get(i).getLocation()));
+                System.out.println("City by rownum " + dbQuery.getCityByRowNum(dbQuery.getRowNumber(locationData.get(i).getLocation())));
+                requestJsonObject(locationData.get(i));
             }
         }
 
@@ -131,19 +122,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-                Log.i(TAG, "Place: " + place.getName());
-                allData = new ArrayList<LocationObject>();
-                query = new DatabaseQuery(MainActivity.this);
-                if(query.insertNewLocation(place.getName().toString()))
+                completeCityWeatherData = new ArrayList<LocationObject>();
+                dbQuery = new DatabaseQuery(MainActivity.this);
+                if(dbQuery.insertNewLocation(place.getName().toString()))
                 {
-                    query = new DatabaseQuery(MainActivity.this);
-                    allLocations = query.getStoredDataLocations();
+                    dbQuery = new DatabaseQuery(MainActivity.this);
+                    locationData = dbQuery.getStoredDataLocations();
 
-                    if(null != allLocations){
-                        for(int i = 0; i < allLocations.size(); i++){
-                            System.out.println("Response printing " + allLocations.get(i).getLocation());
-                            requestJsonObject(allLocations.get(i));
+                    if(null != locationData){
+                        for(int i = 0; i < locationData.size(); i++){
+                            System.out.println("Response printing " + locationData.get(i).getLocation());
+                            requestJsonObject(locationData.get(i));
                         }
                     }
                 }
@@ -153,8 +142,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
             @Override
             public void onError(Status status) {
-                // TODO: Handle the error.
-                Log.i(TAG, "An error occurred: " + status);
             }
         });
         AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
@@ -166,17 +153,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         final Button button = findViewById(R.id.add_current_location);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                allData = new ArrayList<LocationObject>();
-                query = new DatabaseQuery(MainActivity.this);
-                if(query.insertNewLocation(query.getCurrentCity()))
+                completeCityWeatherData = new ArrayList<LocationObject>();
+                dbQuery = new DatabaseQuery(MainActivity.this);
+                if(dbQuery.insertNewLocation(dbQuery.getCurrentCity()))
                 {
-                    query = new DatabaseQuery(MainActivity.this);
-                    allLocations = query.getStoredDataLocations();
+                    dbQuery = new DatabaseQuery(MainActivity.this);
+                    locationData = dbQuery.getStoredDataLocations();
 
-                    if(null != allLocations){
-                        for(int i = 0; i < allLocations.size(); i++){
-                            System.out.println("Response printing " + allLocations.get(i).getLocation());
-                            requestJsonObject(allLocations.get(i));
+                    if(null != locationData){
+                        for(int i = 0; i < locationData.size(); i++){
+                            System.out.println("Response printing " + locationData.get(i).getLocation());
+                            requestJsonObject(locationData.get(i));
                         }
                     }
                 }
@@ -196,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
          int current_selected_id = R.id.menu_centigrade;
-         if(query.getUserDegreeMetric().equals("Fahrenheit"))
+         if(dbQuery.getUserDegreeMetric().equals("Fahrenheit"))
              current_selected_id = R.id.menu_fahrenheit ;
          MenuItem refresh = menu.findItem(current_selected_id);
          refresh.setChecked(true);
@@ -210,34 +197,34 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             case R.id.menu_fahrenheit:
                 if (item.isChecked()) item.setChecked(false);
                 else item.setChecked(true);
-                query.insertUserDegreeMetric("Fahrenheit");
+                dbQuery.insertUserDegreeMetric("Fahrenheit");
 
-                allData = new ArrayList<LocationObject>();
-                query = new DatabaseQuery(MainActivity.this);
-                allLocations = query.getStoredDataLocations();
+                completeCityWeatherData = new ArrayList<LocationObject>();
+                dbQuery = new DatabaseQuery(MainActivity.this);
+                locationData = dbQuery.getStoredDataLocations();
 
-                if (null != allLocations) {
-                    for (int i = 0; i < allLocations.size(); i++) {
+                if (null != locationData) {
+                    for (int i = 0; i < locationData.size(); i++) {
                         // make volley network call here
-                        System.out.println("Response printing " + allLocations.get(i).getLocation());
-                        requestJsonObject(allLocations.get(i));
+                        System.out.println("Response printing " + locationData.get(i).getLocation());
+                        requestJsonObject(locationData.get(i));
                     }
                 }
                 return true;
             case R.id.menu_centigrade:
                 if (item.isChecked()) item.setChecked(false);
                 else item.setChecked(true);
-                query.insertUserDegreeMetric("Centigrade");
+                dbQuery.insertUserDegreeMetric("Centigrade");
 
-                allData = new ArrayList<LocationObject>();
-                query = new DatabaseQuery(MainActivity.this);
-                allLocations = query.getStoredDataLocations();
+                completeCityWeatherData = new ArrayList<LocationObject>();
+                dbQuery = new DatabaseQuery(MainActivity.this);
+                locationData = dbQuery.getStoredDataLocations();
 
-                if (null != allLocations) {
-                    for (int i = 0; i < allLocations.size(); i++) {
+                if (null != locationData) {
+                    for (int i = 0; i < locationData.size(); i++) {
                         // make volley network call here
-                        System.out.println("Response printing " + allLocations.get(i).getLocation());
-                        requestJsonObject(allLocations.get(i));
+                        System.out.println("Response printing " + locationData.get(i).getLocation());
+                        requestJsonObject(locationData.get(i));
                     }
                 }
                 return true;
@@ -259,13 +246,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 Log.d("MainActivity", "Response " + response);
                 GsonBuilder builder = new GsonBuilder();
                 Gson gson = builder.create();
-                locationMapObject = gson.fromJson(response, LocationMapObject.class);
-                if (null == locationMapObject) {
+                jsonLocationObject = gson.fromJson(response, LocationMapObject.class);
+                if (null == jsonLocationObject) {
                     Toast.makeText(getApplicationContext(), "Nothing was returned", Toast.LENGTH_LONG).show();
                 } else {
-                    String city = locationMapObject.getName() /*+ ", " + locationMapObject.getSys().getCountry()*/;
-                    query.insertCurrentLocation(city);
-                    System.out.println("Got the current Location as " + query.getCurrentCity());
+                    String city = jsonLocationObject.getName() /*+ ", " + locationMapObject.getSys().getCountry()*/;
+                    dbQuery.insertCurrentLocation(city);
+                    System.out.println("Got the current Location as " + dbQuery.getCurrentCity());
                 }
             }
         }, new Response.ErrorListener() {
@@ -274,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 Log.d("MainActivity", "Error " + error.getMessage());
             }
         });
-        queue.add(stringRequest);
+        requestQueue.add(stringRequest);
     }
 
     private void requestJsonObject(final DatabaseLocationObject paramValue){
@@ -285,36 +272,36 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 Log.d("MainActivity", "Response " + response);
                 GsonBuilder builder = new GsonBuilder();
                 Gson gson = builder.create();
-                locationMapObject = gson.fromJson(response, LocationMapObject.class);
-                if (null == locationMapObject) {
+                jsonLocationObject = gson.fromJson(response, LocationMapObject.class);
+                if (null == jsonLocationObject) {
                     Toast.makeText(getApplicationContext(), "Nothing was returned", Toast.LENGTH_LONG).show();
                 } else {
                     final int rowId = paramValue.getId();
-                    Long tempVal = Math.round(Math.floor(Double.parseDouble(locationMapObject.getMain().getTemp())));
-                    Long tempMin = Math.round(Math.floor(Double.parseDouble(locationMapObject.getMain().getTemp_min())));
-                    Long tempMax = Math.round(Math.floor(Double.parseDouble(locationMapObject.getMain().getTemp_max())));
+                    Long tempVal = Math.round(Math.floor(Double.parseDouble(jsonLocationObject.getMain().getTemp())));
+                    Long tempMin = Math.round(Math.floor(Double.parseDouble(jsonLocationObject.getMain().getTemp_min())));
+                    Long tempMax = Math.round(Math.floor(Double.parseDouble(jsonLocationObject.getMain().getTemp_max())));
 
 
-                    System.out.println("Degree preference" + query.getUserDegreeMetric());
+                    System.out.println("Degree preference" + dbQuery.getUserDegreeMetric());
 
                     degreeMetric = "C";
 
-                    if(query.getUserDegreeMetric().equals("Fahrenheit")) {
-                        System.out.println("Degree preference inside if" + query.getUserDegreeMetric());
+                    if(dbQuery.getUserDegreeMetric().equals("Fahrenheit")) {
+                        System.out.println("Degree preference inside if" + dbQuery.getUserDegreeMetric());
                         tempVal = Helper.convertCelsiusToFahrenheit(tempVal);
                         tempMin = Helper.convertCelsiusToFahrenheit(tempMin);
                         tempMax = Helper.convertCelsiusToFahrenheit(tempMax);
                         degreeMetric = "F";
                     }
 
-                    final String city = locationMapObject.getName() + ", " + locationMapObject.getSys().getCountry();
-                    final String weatherInfo = String.valueOf(tempVal) + "<sup>o</sup>" + degreeMetric + ", " + Helper.capitalizeFirstLetter(locationMapObject.getWeather().get(0).getDescription());
+                    final String city = jsonLocationObject.getName() + ", " + jsonLocationObject.getSys().getCountry();
+                    final String weatherInfo = String.valueOf(tempVal) + "<sup>o</sup>" + degreeMetric + ", " + Helper.capitalizeFirstLetter(jsonLocationObject.getWeather().get(0).getDescription());
                     final String tempMinMax = "Min Temp: " + String.valueOf(tempMin) + "<sup>o</sup>" + degreeMetric + "," + " " + "Max Temp: " + String.valueOf(tempMax) + "<sup>o</sup>" + degreeMetric + "";
 
                     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
                     final long finalTs = timestamp.getTime()/1000;
 
-                    String loc = locationMapObject.getCoord().getLat() + "," + locationMapObject.getCoord().getLon();
+                    String loc = jsonLocationObject.getCoord().getLat() + "," + jsonLocationObject.getCoord().getLon();
 
                     String google_url = "https://maps.googleapis.com/maps/api/timezone/json?location=" + loc + "&timestamp=" + finalTs + "&key=" + Helper.TIMEZONE_API_KEY;
 
@@ -331,11 +318,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                                 SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm");
                                 sdf.setTimeZone(TimeZone.getTimeZone(timeZoneId));
                                 String timeToDisplay = sdf.format(currentTime);
-                                allData.add(new LocationObject(rowId, city, weatherInfo, tempMinMax, timeToDisplay));
+                                completeCityWeatherData.add(new LocationObject(rowId, city, weatherInfo, tempMinMax, timeToDisplay));
 
                                 //to be modified - venkatesh
-                                locationAdapter = new LocationAdapter(MainActivity.this, allData);
-                                locationRecyclerView.setAdapter(locationAdapter);
+                                cityListAdapter = new CityListAdapter(MainActivity.this, completeCityWeatherData);
+                                locationRecyclerView.setAdapter(cityListAdapter);
 
 
                             }
@@ -349,7 +336,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                             Log.d("MainActivity", "Error " + error.getMessage());
                         }
                     });
-                    queue.add(jsonRequest);
+                    requestQueue.add(jsonRequest);
                 }
             }
         }, new Response.ErrorListener() {
@@ -358,7 +345,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 Log.d("MainActivity", "Error " + error.getMessage());
             }
         });
-        queue.add(stringRequest);
+        requestQueue.add(stringRequest);
     }
 
     @Override

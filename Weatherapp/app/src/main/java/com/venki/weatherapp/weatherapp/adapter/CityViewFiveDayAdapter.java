@@ -13,7 +13,7 @@ import com.venki.weatherapp.weatherapp.helpers.Helper;
 
 import java.util.List;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolders> {
+public class CityViewFiveDayAdapter extends RecyclerView.Adapter<CityViewFiveDayHolders> {
 
     private List<WeatherObject> dailyWeather;
 
@@ -23,21 +23,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
 
     protected Context context;
 
-    public RecyclerViewAdapter(Context context, List<WeatherObject> dailyWeather) {
+    public CityViewFiveDayAdapter(Context context, List<WeatherObject> dailyWeather) {
         this.dailyWeather = dailyWeather;
         this.context = context;
     }
 
     @Override
-    public RecyclerViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
-        RecyclerViewHolders viewHolder = null;
+    public CityViewFiveDayHolders onCreateViewHolder(ViewGroup parent, int viewType) {
+        CityViewFiveDayHolders viewHolder = null;
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.five_day_view, parent, false);
-        viewHolder = new RecyclerViewHolders(layoutView);
+        viewHolder = new CityViewFiveDayHolders(layoutView);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerViewHolders holder, int position) {
+    public void onBindViewHolder(CityViewFiveDayHolders holder, int position) {
 
         degreeMetric = "C";
 

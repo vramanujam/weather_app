@@ -7,12 +7,8 @@ import android.widget.TextView;
 
 import com.venki.weatherapp.weatherapp.R;
 
-/**
- * Created by vigneshwarichandrasekaran on 11/12/17.
- */
-
-public class ThreedayViewHolders extends RecyclerView.ViewHolder{
-    private static final String TAG = RecyclerViewHolders.class.getSimpleName();
+public class ThreeHourViewHolders extends RecyclerView.ViewHolder{
+    private static final String TAG = CityViewFiveDayHolders.class.getSimpleName();
 
     public TextView current_time;
 
@@ -23,7 +19,7 @@ public class ThreedayViewHolders extends RecyclerView.ViewHolder{
     public TextView weatherStatus;
 
 
-    public ThreedayViewHolders(final View itemView) {
+    public ThreeHourViewHolders(final View itemView) {
         super(itemView);
         current_time = (TextView)itemView.findViewById(R.id.time_of_day);
         weatherIcon = (ImageView)itemView.findViewById(R.id.three_hour_weather_icon);
