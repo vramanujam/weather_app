@@ -152,7 +152,7 @@ public class DatabaseQuery extends DatabaseObject{
         values.put("id",1);
         values.put("degreeMetric", metric);
         getDbConnection().replace(METRIC_TABLE_NAME, null, values);
-        getDbConnection().close();
+        //getDbConnection().close();
         return true;
     }
 

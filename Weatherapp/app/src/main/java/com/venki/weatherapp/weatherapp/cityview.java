@@ -28,6 +28,8 @@ public class cityview extends AppCompatActivity {
         actionBar.show();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        setTitle("City View");
+
         query = new DatabaseQuery(this);
         String currentLocation = "";
         Bundle extras = getIntent().getExtras();

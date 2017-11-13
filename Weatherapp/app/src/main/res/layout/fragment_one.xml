@@ -34,12 +34,12 @@
 
         <ImageView
             android:id="@+id/weather_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="67dp"
+            android:layout_height="67dp"
             android:layout_gravity="center_horizontal"
             android:contentDescription="@string/app_name"
             android:src="@drawable/sun"
-            android:layout_marginTop="@dimen/_18sdp"/>
+            android:layout_marginTop="@dimen/_21sdp"/>
 
          <TextView
             android:id="@+id/weather_result"
@@ -103,7 +103,7 @@
                     android:textSize="@dimen/_14sdp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/_4sdp"
-                    android:text="@string/wind_speed"/>
+                    android:text=""/>
 
             </LinearLayout>
 
@@ -140,7 +140,7 @@
                     android:layout_gravity="center_horizontal"
                     android:textSize="@dimen/_14sdp"
                     android:layout_marginTop="@dimen/_4sdp"
-                    android:text="@string/humidity_rate"/>
+                    android:text=""/>
 
             </LinearLayout>
 

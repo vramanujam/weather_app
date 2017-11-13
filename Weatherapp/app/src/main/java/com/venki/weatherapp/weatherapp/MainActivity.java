@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
-        setTitle(Helper.LOCATION_LIST);
+        setTitle("City List View");
 
         queue = Volley.newRequestQueue(MainActivity.this);
         allData = new ArrayList<LocationObject>();
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
         }
 
-        Toast.makeText(MainActivity.this, "Count number of locations " + allLocations.size(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(MainActivity.this, "Count number of locations " + allLocations.size(), Toast.LENGTH_LONG).show();
 
 //        ImageButton addLocation = (ImageButton) findViewById(R.id.add_location);
         /*addLocation.setOnClickListener(new View.OnClickListener() {
@@ -164,9 +164,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                             requestJsonObject(allLocations.get(i));
                         }
                     }
-
-                    Toast.makeText(MainActivity.this, "Count number of locations " + allLocations.size(), Toast.LENGTH_LONG).show();
                 }
+                else
+                    Toast.makeText(MainActivity.this, " Location already exists", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -203,9 +203,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                             requestJsonObject(allLocations.get(i));
                         }
                     }
-
-                    Toast.makeText(MainActivity.this, "Count number of locations " + allLocations.size(), Toast.LENGTH_LONG).show();
                 }
+                else
+                    Toast.makeText(MainActivity.this, " Location already exists", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -381,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                                 String timeZoneId = response.getString("timeZoneId");
 
                                 Date currentTime = new Date();
-                                SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM yy dd HH:mm");
+                                SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm");
                                 sdf.setTimeZone(TimeZone.getTimeZone(timeZoneId));
                                 String timeToDisplay = sdf.format(currentTime);
                                 allData.add(new LocationObject(rowId, city, weatherInfo, tempMinMax, timeToDisplay));

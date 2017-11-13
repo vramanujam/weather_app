@@ -1,12 +1,10 @@
 <resources>
-    <string name="app_name">Android Weather App</string>
-    <string name="city_country">Enugu, Nigeria</string>
-    <string name="date_today">Friday, 8 July</string>
+    <string name="app_name">Lab 2 : Weather App</string>
     <string name="current_temperature">26</string>
     <string name="weather_information">Partly Cloud</string>
     <string name="temp_information">26, partly cloudy</string>
     <string name="wind">WIND SPEED</string>
-    <string name="wind_speed">18 km/h</string>
+    <string name="wind_speed">18 m/s</string>
     <string name="humidity">MOISTURE</string>
     <string name="min_temp">MIN TEMP</string>
     <string name="max_temp">MAX TEMP</string>

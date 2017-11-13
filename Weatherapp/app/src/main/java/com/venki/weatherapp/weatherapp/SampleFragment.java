@@ -48,6 +48,7 @@ import com.venki.weatherapp.weatherapp.database.DatabaseQuery;
 import com.venki.weatherapp.weatherapp.entity.WeatherObject;
 import com.venki.weatherapp.weatherapp.helpers.CustomSharedPreference;
 import com.venki.weatherapp.weatherapp.helpers.Helper;
+import com.venki.weatherapp.weatherapp.helpers.ImageLoadTask;
 import com.venki.weatherapp.weatherapp.json.FiveDaysForecast;
 import com.venki.weatherapp.weatherapp.json.FiveWeathers;
 import com.venki.weatherapp.weatherapp.json.Forecast;
@@ -227,6 +228,8 @@ public class SampleFragment extends Fragment implements LocationListener {
                     Long tempVal = Math.round(Math.floor(Double.parseDouble(locationMapObject.getMain().getTemp())));
                     Long tempMin = Math.round(Math.floor(Double.parseDouble(locationMapObject.getMain().getTemp_min())));
                     Long tempMax = Math.round(Math.floor(Double.parseDouble(locationMapObject.getMain().getTemp_max())));
+                    String icon = locationMapObject.getWeather().get(0).getIcon();
+                    System.out.println("Current icon is " + icon);
 
                     System.out.println("Degree preference in weather activity: " + query.getUserDegreeMetric() );
 
@@ -255,10 +258,10 @@ public class SampleFragment extends Fragment implements LocationListener {
                     circleTitle.setText(Html.fromHtml(weatherTemp).toString());
                     //circleTitle.setSubtitleText(Html.fromHtml(weatherDescription).toString());
                     weatherResultDescription.setText("(" + Html.fromHtml(weatherDescription).toString() + ")");
-                    windResult.setText(Html.fromHtml(windSpeed) + " km/h");
+                    windResult.setText(Html.fromHtml(windSpeed) + " m/s");
                     humidityResult.setText(Html.fromHtml(humidityValue) + " %");
                     tempMinMaxView.setText(Html.fromHtml(tempMinMax));
-
+                    new ImageLoadTask("http://openweathermap.org/img/w/" + icon + ".png", weatherImage).execute();
                     fiveDaysApiJsonObjectCall(locationMapObject.getName());
                 }
             }
@@ -278,7 +281,7 @@ public class SampleFragment extends Fragment implements LocationListener {
 
                 if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     //make api call
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 2, this);
+                    /*locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 2, this);
                     if (locationManager != null) {
                         location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         apiUrl = "http://api.openweathermap.org/data/2.5/weather?lat="+location.getLatitude()+"&lon="+location.getLongitude()+"&APPID="+Helper.API_KEY+"&units=metric";
@@ -286,7 +289,7 @@ public class SampleFragment extends Fragment implements LocationListener {
                     }else{
                         apiUrl = "http://api.openweathermap.org/data/2.5/weather?lat=51.5074&lon=0.1278&APPID="+Helper.API_KEY+"&units=metric";
                         makeJsonObject(apiUrl);
-                    }
+                    }*/
                 }
             }else{
                 Toast.makeText(getActivity(), getString(R.string.permission_notice), Toast.LENGTH_LONG).show();
@@ -374,8 +377,8 @@ public class SampleFragment extends Fragment implements LocationListener {
 
                                 if(weatherInfo.get(i).getConditions().get(0).getDescription() != null)
                                     System.out.println("Weather info is null " + weatherInfo.get(i).getConditions().get(0).getDescription());
-
-                                threeHourForecast.add(new WeatherObject(hour[1], R.drawable.small_weather_icon, temp, weatherInfo.get(i).getConditions().get(0).getMain(),tempMaximum));
+                                String icon = weatherInfo.get(i).getConditions().get(0).getIcon();
+                                threeHourForecast.add(new WeatherObject(hour[1], icon, temp, weatherInfo.get(i).getConditions().get(0).getMain(),tempMaximum));
                                 /*System.out.println("Current Day");
                                 System.out.println("time " + time);
                                 System.out.println("temp "+ temp);*/

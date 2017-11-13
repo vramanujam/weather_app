@@ -7,13 +7,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.venki.weatherapp.weatherapp.R;
+import com.venki.weatherapp.weatherapp.database.DatabaseQuery;
 import com.venki.weatherapp.weatherapp.entity.WeatherObject;
+import com.venki.weatherapp.weatherapp.helpers.Helper;
 
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolders> {
 
     private List<WeatherObject> dailyWeather;
+
+    private DatabaseQuery query;
+
+    private String degreeMetric;
 
     protected Context context;
 
@@ -33,15 +39,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     @Override
     public void onBindViewHolder(RecyclerViewHolders holder, int position) {
 
-            holder.dayOfWeek.setText(dailyWeather.get(position).getDayOfWeek());
-            //holder.weatherIcon.setImageResource(dailyWeather.get(position).getWeatherIcon());
+        degreeMetric = "C";
 
-            double mTemp = Double.parseDouble(dailyWeather.get(position).getWeatherResult());
-            holder.weatherResult.setText(String.valueOf(Math.round(mTemp)) + "°");
+        query = new DatabaseQuery(context);
 
-            holder.weatherResultSmall.setText(dailyWeather.get(position).getWeatherResultSmall());
-            holder.weatherResultBig.setText(dailyWeather.get(position).getWeatherResultBig());
-//            holder.weatherResultSmall.setVisibility(View.GONE);
+        long mTemp = (long)Double.parseDouble(dailyWeather.get(position).getWeatherResult());
+        long mLowTemp = (long)Double.parseDouble(dailyWeather.get(position).getWeatherResultSmall());
+        long mHiTemp = (long)Double.parseDouble(dailyWeather.get(position).getWeatherResultBig());
+
+        if(query.getUserDegreeMetric().equals("Fahrenheit")) {
+            System.out.println("Degree preference in three hour adapter" + query.getUserDegreeMetric());
+            mTemp = Helper.convertCelsiusToFahrenheit(mTemp);
+            mLowTemp = Helper.convertCelsiusToFahrenheit(mLowTemp);
+            mHiTemp = Helper.convertCelsiusToFahrenheit(mHiTemp);
+            degreeMetric = "F";
+        }
+
+        holder.dayOfWeek.setText(dailyWeather.get(position).getDayOfWeek());
+        holder.weatherResult.setText(String.valueOf(Math.round(mTemp)) + "°" + degreeMetric);
+        holder.weatherResultSmall.setText("lo:" + String.valueOf(Math.round(mLowTemp)) + "°" + degreeMetric);
+        holder.weatherResultBig.setText("hi:" + String.valueOf(Math.round(mHiTemp)) + "°" + degreeMetric);
     }
 
     @Override

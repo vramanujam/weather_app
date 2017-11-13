@@ -31,8 +31,8 @@ public class Helper {
     }
 
     public static long convertCelsiusToFahrenheit (long centigrade) {
-        long fahrenheit;
-        fahrenheit = centigrade * (9/5) + 32;
-        return fahrenheit;
+        double fahrenheit;
+        fahrenheit = centigrade * ((float)9/(float)5) + 32;
+        return (long)fahrenheit;
     }
 }

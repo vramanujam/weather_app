@@ -13,9 +13,19 @@ public class WeatherObject {
 
     private String weatherResultBig;
 
+    private String weatherUrl;
+
     public WeatherObject(String dayOfWeek, int weatherIcon, String weatherResult, String weatherResultSmall, String weatherResultBig) {
         this.dayOfWeek = dayOfWeek;
         this.weatherIcon = weatherIcon;
+        this.weatherResult = weatherResult;
+        this.weatherResultSmall = weatherResultSmall;
+        this.weatherResultBig = weatherResultBig;
+    }
+
+    public WeatherObject(String dayOfWeek, String weatherIcon, String weatherResult, String weatherResultSmall, String weatherResultBig) {
+        this.dayOfWeek = dayOfWeek;
+        this.weatherUrl = weatherIcon;
         this.weatherResult = weatherResult;
         this.weatherResultSmall = weatherResultSmall;
         this.weatherResultBig = weatherResultBig;
@@ -40,4 +50,6 @@ public class WeatherObject {
     public String getWeatherResultBig() {
         return weatherResultBig;
     }
+
+    public String getWeatherUrl(){ return weatherUrl;}
 }

@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/city_country"
+            android:text=""
             android:textSize="@dimen/_24sdp"
             android:layout_marginTop="@dimen/_16sdp"
             android:textColor="@color/colorWhite"/>
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/date_today"
+            android:text=""
             android:textSize="@dimen/_14sdp"
             android:layout_marginTop="@dimen/_8sdp"
             android:textColor="@color/colorWhite"/>
