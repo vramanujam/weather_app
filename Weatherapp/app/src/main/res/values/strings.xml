@@ -5,9 +5,9 @@
     <string name="current_temperature">26</string>
     <string name="weather_information">Partly Cloud</string>
     <string name="temp_information">26, partly cloudy</string>
-    <string name="wind">WIND</string>
+    <string name="wind">WIND SPEED</string>
     <string name="wind_speed">18 km/h</string>
-    <string name="humidity">HUMIDITY</string>
+    <string name="humidity">MOISTURE</string>
     <string name="min_temp">MIN TEMP</string>
     <string name="max_temp">MAX TEMP</string>
     <string name="humidity_rate">73%</string>

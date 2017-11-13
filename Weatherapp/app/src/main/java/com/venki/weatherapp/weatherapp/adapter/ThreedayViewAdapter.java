@@ -41,8 +41,7 @@ public class ThreedayViewAdapter extends RecyclerView.Adapter<ThreedayViewHolder
         double mTemp = Double.parseDouble(dailyWeather.get(position).getWeatherResult());
         holder.weatherResult.setText(String.valueOf(Math.round(mTemp)) + "°");
 
-        holder.weatherResultSmall.setText(dailyWeather.get(position).getWeatherResultSmall());
-        holder.weatherResultBig.setText(dailyWeather.get(position).getWeatherResultBig());
+        holder.weatherStatus.setText(dailyWeather.get(position).getWeatherResultSmall());
 //            holder.weatherResultSmall.setVisibility(View.GONE);
     }
 

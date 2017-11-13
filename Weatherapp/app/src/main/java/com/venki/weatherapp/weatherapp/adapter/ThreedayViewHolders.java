@@ -20,16 +20,14 @@ public class ThreedayViewHolders extends RecyclerView.ViewHolder{
 
     public TextView weatherResult;
 
-    public TextView weatherResultSmall;
+    public TextView weatherStatus;
 
-    public TextView weatherResultBig;
 
     public ThreedayViewHolders(final View itemView) {
         super(itemView);
         current_time = (TextView)itemView.findViewById(R.id.time_of_day);
         weatherIcon = (ImageView)itemView.findViewById(R.id.three_hour_weather_icon);
         weatherResult = (TextView) itemView.findViewById(R.id.three_hour_weather_result);
-        weatherResultSmall = (TextView)itemView.findViewById(R.id.three_hour_weather_result_small);
-        weatherResultBig = (TextView)itemView.findViewById(R.id.three_hour_weather_result_big);
+        weatherStatus = (TextView)itemView.findViewById(R.id.threehour_weather_status);
     }
 }

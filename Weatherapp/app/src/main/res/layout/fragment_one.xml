@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -19,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/city_country"
+            android:text=""
             android:textSize="@dimen/_21sdp"
             android:layout_marginTop="@dimen/_16sdp"
             android:textColor="@color/colorWhite"/>
@@ -29,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/date_today"
+            android:text=""
             android:textSize="@dimen/_14sdp"
             android:layout_marginTop="@dimen/_8sdp"
             android:textColor="@color/colorWhite"/>
@@ -73,22 +71,6 @@
             android:layout_marginTop="@dimen/_4sdp"
             android:text="@string/humidity_rate"/>
 
-        <!-- <com.github.pavlospt.CircleView
-            android:id="@+id/weather_result"
-            android:layout_width="147dp"
-            android:layout_height="88dp"
-            android:layout_marginTop="@dimen/_8sdp"
-            app:cv_titleSubtitleSpace="40"
-            app:cv_fillColor="@color/colorBackground"
-            app:cv_strokeColorValue="@color/colorCircleStroke"
-            app:cv_backgroundColorValue="@color/colorCircleStroke"
-            app:cv_titleColor="@color/colorWhite"
-            app:cv_titleSize="@dimen/_50sdp"
-            app:cv_titleText="@string/current_temperature"
-            app:cv_subtitleSize="@dimen/_12sdp"
-            app:cv_subtitleText="@string/weather_information"
-            android:layout_gravity="center_horizontal" /> -->
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -107,9 +89,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorSubTitle"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/_14sdp"
                     android:textStyle="bold"
+                    android:layout_gravity="center_horizontal"
                     android:text="@string/wind"/>
 
                 <TextView
@@ -118,6 +101,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorWhite"
                     android:textSize="@dimen/_14sdp"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/_4sdp"
                     android:text="@string/wind_speed"/>
 
@@ -128,16 +112,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_weight="1">
-
-                <!-- <ImageButton
-                    android:id="@+id/add_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@android:color/transparent"
-                    android:elevation="@dimen/_4sdp"
-                    android:layout_marginTop="@dimen/_12sdp"
-                    android:src="@drawable/cross"/> -->
 
             </LinearLayout>
 
@@ -151,21 +125,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorSubTitle"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/_14sdp"
-                    android:layout_gravity="right"
+                    android:layout_gravity="center_horizontal"
+
                     android:textStyle="bold"
                     android:text="@string/humidity"/>
-
-                <!-- <TextView
-                    android:id="@+id/temp_min_max_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorWhite"
-                    android:layout_gravity="center_horizontal"
-                    android:textSize="@dimen/_14sdp"
-                    android:layout_marginTop="@dimen/_4sdp"
-                    android:text="@string/humidity_rate"/> -->
 
                 <TextView
                     android:id="@+id/humidity_result"
@@ -180,38 +145,39 @@
             </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:background="@color/colorBottomBackground"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Three Hour Forecast"
-            android:textSize="@dimen/_12sdp"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:textColor="@color/colorWhite"/>
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/threehour_layout"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:scrollbars="none"/>
+            android:layout_height="18dp"
+            android:layout_weight="2"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Three Hour Forecast"
+                android:textSize="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:textColor="@color/colorBlack"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/threehour_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:scrollbars="none"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="1dp"
         android:layout_weight="2"
-        android:background="@color/colorBottomBackground"
+        android:background="@color/colorBackground"
         android:orientation="vertical">
 
         <TextView

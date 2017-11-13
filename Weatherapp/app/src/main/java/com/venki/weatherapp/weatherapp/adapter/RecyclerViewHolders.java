@@ -13,7 +13,7 @@ public class RecyclerViewHolders extends RecyclerView.ViewHolder{
 
     public TextView dayOfWeek;
 
-    public ImageView weatherIcon;
+   // public ImageView weatherIcon;
 
     public TextView weatherResult;
 
@@ -24,7 +24,7 @@ public class RecyclerViewHolders extends RecyclerView.ViewHolder{
     public RecyclerViewHolders(final View itemView) {
         super(itemView);
         dayOfWeek = (TextView)itemView.findViewById(R.id.day_of_week);
-        weatherIcon = (ImageView)itemView.findViewById(R.id.weather_icon);
+        //weatherIcon = (ImageView)itemView.findViewById(R.id.weather_icon);
         weatherResult = (TextView) itemView.findViewById(R.id.weather_result);
         weatherResultSmall = (TextView)itemView.findViewById(R.id.weather_result_small);
         weatherResultBig = (TextView)itemView.findViewById(R.id.weather_result_big);

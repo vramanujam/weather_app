@@ -47,9 +47,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -375,18 +378,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 //                            response = gson.toJson(response);
                             try {
                                 // to be fine-tuned by Smitha
-                                String status = response.getString("status");
-                                int dstOffset = response.getInt("dstOffset");
-                                int rawOffset = response.getInt("rawOffset");
+                                String timeZoneId = response.getString("timeZoneId");
 
-                                long localTime = (finalTs + dstOffset + rawOffset)*1000;
-                                System.out.println("Time reponse" + localTime);
-
-                                Calendar cal = Calendar.getInstance();
-                                cal.setTimeInMillis(localTime);
-
-                                String timeToDisplay = String.format("%02d:%02d", cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE));
-
+                                Date currentTime = new Date();
+                                SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM yy dd HH:mm");
+                                sdf.setTimeZone(TimeZone.getTimeZone(timeZoneId));
+                                String timeToDisplay = sdf.format(currentTime);
                                 allData.add(new LocationObject(rowId, city, weatherInfo, tempMinMax, timeToDisplay));
 
                                 //to be modified - venkatesh
@@ -396,7 +393,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
                             }
                             catch(JSONException e){
-                                Log.e("MYAPP", "unexpected JSON exception", e);
+                                Log.e("Android Weather App", "Unexpected JSON exception", e);
                             }
 
 

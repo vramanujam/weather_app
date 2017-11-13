@@ -8,12 +8,12 @@ public class FiveWeathers {
 
     private Main main;
 
-    private List<WeatherResults> conditions;
+    private List<WeatherResults> weather;
 
-    public FiveWeathers(String dt_txt, Main main, List<WeatherResults> conditions) {
+    public FiveWeathers(String dt_txt, Main main, List<WeatherResults> weather) {
         this.dt_txt = dt_txt;
         this.main = main;
-        this.conditions = conditions;
+        this.weather = weather;
     }
 
     public String getDt_txt(){
@@ -25,6 +25,6 @@ public class FiveWeathers {
     }
 
     public List<WeatherResults> getConditions() {
-        return conditions;
+        return weather;
     }
 }

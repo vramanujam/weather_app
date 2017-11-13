@@ -42,6 +42,7 @@ import com.github.pavlospt.CircleView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.venki.weatherapp.weatherapp.adapter.RecyclerViewAdapter;
+import com.venki.weatherapp.weatherapp.adapter.SpacesItemDecoration;
 import com.venki.weatherapp.weatherapp.adapter.ThreedayViewAdapter;
 import com.venki.weatherapp.weatherapp.database.DatabaseQuery;
 import com.venki.weatherapp.weatherapp.entity.WeatherObject;
@@ -192,9 +193,12 @@ public class SampleFragment extends Fragment implements LocationListener {
         recyclerView.setHasFixedSize(true);
 
 
-        GridLayoutManager threehourgrid = new GridLayoutManager(getActivity(), 5,GridLayoutManager.VERTICAL, false);
+        GridLayoutManager threehourgrid = new GridLayoutManager(getActivity(), 1,GridLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        int spacingInPixels = getResources().getDimensionPixelSize(R.dimen._1sdp);
         threehourView = (RecyclerView)getView().findViewById(R.id.threehour_layout);
-        threehourView.setLayoutManager(threehourgrid);
+        threehourView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
+        threehourView.setLayoutManager(layoutManager);
         threehourView.setHasFixedSize(true);
         /*threehourView = (RecyclerView)getView().findViewById(R.id.threehour_layout);
         threehourView.setLayoutManager(gridLayoutManager);
@@ -367,7 +371,11 @@ public class SampleFragment extends Fragment implements LocationListener {
 
                             if(isCurrentDate(time) == 0){
                                 String hour[] = time.split(" ");
-                                threeHourForecast.add(new WeatherObject(hour[1], R.drawable.small_weather_icon, temp, tempMin,tempMaximum));
+
+                                if(weatherInfo.get(i).getConditions().get(0).getDescription() != null)
+                                    System.out.println("Weather info is null " + weatherInfo.get(i).getConditions().get(0).getDescription());
+
+                                threeHourForecast.add(new WeatherObject(hour[1], R.drawable.small_weather_icon, temp, weatherInfo.get(i).getConditions().get(0).getMain(),tempMaximum));
                                 /*System.out.println("Current Day");
                                 System.out.println("time " + time);
                                 System.out.println("temp "+ temp);*/
