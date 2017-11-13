@@ -8,14 +8,14 @@ import android.view.ViewGroup;
 
 import com.venki.weatherapp.weatherapp.R;
 import com.venki.weatherapp.weatherapp.database.DatabaseQuery;
-import com.venki.weatherapp.weatherapp.entity.WeatherObject;
+import com.venki.weatherapp.weatherapp.entity.CityWeatherData;
 import com.venki.weatherapp.weatherapp.helpers.Helper;
 
 import java.util.List;
 
 public class CityViewFiveDayAdapter extends RecyclerView.Adapter<CityViewFiveDayHolders> {
 
-    private List<WeatherObject> dailyWeather;
+    private List<CityWeatherData> dailyWeather;
 
     private DatabaseQuery query;
 
@@ -23,7 +23,7 @@ public class CityViewFiveDayAdapter extends RecyclerView.Adapter<CityViewFiveDay
 
     protected Context context;
 
-    public CityViewFiveDayAdapter(Context context, List<WeatherObject> dailyWeather) {
+    public CityViewFiveDayAdapter(Context context, List<CityWeatherData> dailyWeather) {
         this.dailyWeather = dailyWeather;
         this.context = context;
     }

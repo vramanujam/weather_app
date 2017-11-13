@@ -35,8 +35,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.venki.weatherapp.weatherapp.adapter.CityListAdapter;
 import com.venki.weatherapp.weatherapp.database.DatabaseQuery;
-import com.venki.weatherapp.weatherapp.entity.DatabaseLocationObject;
-import com.venki.weatherapp.weatherapp.entity.LocationObject;
+import com.venki.weatherapp.weatherapp.entity.DbLocationObj;
+import com.venki.weatherapp.weatherapp.entity.CityLocationData;
 import com.venki.weatherapp.weatherapp.helpers.Helper;
 import com.venki.weatherapp.weatherapp.json.LocationMapObject;
 
@@ -52,9 +52,9 @@ import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
-    private List<DatabaseLocationObject> locationData;
+    private List<DbLocationObj> locationData;
 
-    private List<LocationObject> completeCityWeatherData;
+    private List<CityLocationData> completeCityWeatherData;
 
     private CityListAdapter cityListAdapter;
 
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         setTitle("City List View");
 
         requestQueue = Volley.newRequestQueue(MainActivity.this);
-        completeCityWeatherData = new ArrayList<LocationObject>();
+        completeCityWeatherData = new ArrayList<CityLocationData>();
 
         //query = new DatabaseQuery(MainActivity.this);
         //query.insertNewLocation("chennai");
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                completeCityWeatherData = new ArrayList<LocationObject>();
+                completeCityWeatherData = new ArrayList<CityLocationData>();
                 dbQuery = new DatabaseQuery(MainActivity.this);
                 if(dbQuery.insertNewLocation(place.getName().toString()))
                 {
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         final Button button = findViewById(R.id.add_current_location);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                completeCityWeatherData = new ArrayList<LocationObject>();
+                completeCityWeatherData = new ArrayList<CityLocationData>();
                 dbQuery = new DatabaseQuery(MainActivity.this);
                 if(dbQuery.insertNewLocation(dbQuery.getCurrentCity()))
                 {
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 else item.setChecked(true);
                 dbQuery.insertUserDegreeMetric("Fahrenheit");
 
-                completeCityWeatherData = new ArrayList<LocationObject>();
+                completeCityWeatherData = new ArrayList<CityLocationData>();
                 dbQuery = new DatabaseQuery(MainActivity.this);
                 locationData = dbQuery.getStoredDataLocations();
 
@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 else item.setChecked(true);
                 dbQuery.insertUserDegreeMetric("Centigrade");
 
-                completeCityWeatherData = new ArrayList<LocationObject>();
+                completeCityWeatherData = new ArrayList<CityLocationData>();
                 dbQuery = new DatabaseQuery(MainActivity.this);
                 locationData = dbQuery.getStoredDataLocations();
 
@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         requestQueue.add(stringRequest);
     }
 
-    private void requestJsonObject(final DatabaseLocationObject paramValue){
+    private void requestJsonObject(final DbLocationObj paramValue){
         String url ="http://api.openweathermap.org/data/2.5/weather?q="+paramValue.getLocation()+"&APPID="+ Helper.API_KEY+"&units=metric";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -318,7 +318,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                                 SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm");
                                 sdf.setTimeZone(TimeZone.getTimeZone(timeZoneId));
                                 String timeToDisplay = sdf.format(currentTime);
-                                completeCityWeatherData.add(new LocationObject(rowId, city, weatherInfo, tempMinMax, timeToDisplay));
+                                completeCityWeatherData.add(new CityLocationData(rowId, city, weatherInfo, tempMinMax, timeToDisplay));
 
                                 //to be modified - venkatesh
                                 cityListAdapter = new CityListAdapter(MainActivity.this, completeCityWeatherData);

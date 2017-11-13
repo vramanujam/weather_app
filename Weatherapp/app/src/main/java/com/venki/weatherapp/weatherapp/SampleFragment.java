@@ -35,9 +35,9 @@ import com.google.gson.GsonBuilder;
 import com.venki.weatherapp.weatherapp.adapter.CityViewFiveDayAdapter;
 import com.venki.weatherapp.weatherapp.adapter.ThreeHourViewAdapter;
 import com.venki.weatherapp.weatherapp.database.DatabaseQuery;
-import com.venki.weatherapp.weatherapp.entity.WeatherObject;
+import com.venki.weatherapp.weatherapp.entity.CityWeatherData;
 import com.venki.weatherapp.weatherapp.helpers.Helper;
-import com.venki.weatherapp.weatherapp.helpers.ImageLoadTask;
+import com.venki.weatherapp.weatherapp.helpers.ImageLoader;
 import com.venki.weatherapp.weatherapp.json.FiveDaysForecast;
 import com.venki.weatherapp.weatherapp.json.FiveWeathers;
 import com.venki.weatherapp.weatherapp.json.Forecast;
@@ -231,7 +231,7 @@ public class SampleFragment extends Fragment implements LocationListener {
                     windResult.setText(Html.fromHtml(windSpeed) + " m/s");
                     humidityResult.setText(Html.fromHtml(humidityValue) + " %");
                     tempMinMaxView.setText(Html.fromHtml(tempMinMax));
-                    new ImageLoadTask("http://openweathermap.org/img/w/" + icon + ".png", weatherImage).execute();
+                    new ImageLoader("http://openweathermap.org/img/w/" + icon + ".png", weatherImage).execute();
                     fiveDaysApiJsonObjectCall(locationMapObject.getName());
                 }
             }
@@ -314,8 +314,8 @@ public class SampleFragment extends Fragment implements LocationListener {
 
     private void fiveDaysApiJsonObjectCall(String city){
         String apiUrl = "http://api.openweathermap.org/data/2.5/forecast?q="+city+ "&APPID="+Helper.API_KEY+"&units=metric";
-        final List<WeatherObject> daysOfTheWeek = new ArrayList<WeatherObject>();
-        final List<WeatherObject> threeHourForecast = new ArrayList<WeatherObject>();
+        final List<CityWeatherData> daysOfTheWeek = new ArrayList<CityWeatherData>();
+        final List<CityWeatherData> threeHourForecast = new ArrayList<CityWeatherData>();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, apiUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -346,35 +346,35 @@ public class SampleFragment extends Fragment implements LocationListener {
                                 if(weatherInfo.get(i).getConditions().get(0).getDescription() != null)
                                     System.out.println("Weather info is null " + weatherInfo.get(i).getConditions().get(0).getDescription());
                                 String icon = weatherInfo.get(i).getConditions().get(0).getIcon();
-                                threeHourForecast.add(new WeatherObject(hour[1], icon, temp, weatherInfo.get(i).getConditions().get(0).getMain(),tempMaximum));
+                                threeHourForecast.add(new CityWeatherData(hour[1], icon, temp, weatherInfo.get(i).getConditions().get(0).getMain(),tempMaximum));
                             }
 
                             if(convertTimeToDay(time).equals("Mon") && everyday[0] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
+                                daysOfTheWeek.add(new CityWeatherData(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
                                 everyday[0] = 1;
                             }
                             if(convertTimeToDay(time).equals("Tue") && everyday[1] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
+                                daysOfTheWeek.add(new CityWeatherData(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
                                 everyday[1] = 1;
                             }
                             if(convertTimeToDay(time).equals("Wed") && everyday[2] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
+                                daysOfTheWeek.add(new CityWeatherData(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
                                 everyday[2] = 1;
                             }
                             if(convertTimeToDay(time).equals("Thu") && everyday[3] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
+                                daysOfTheWeek.add(new CityWeatherData(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
                                 everyday[3] = 1;
                             }
                             if(convertTimeToDay(time).equals("Fri") && everyday[4] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
+                                daysOfTheWeek.add(new CityWeatherData(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
                                 everyday[4] = 1;
                             }
                             if(convertTimeToDay(time).equals("Sat") && everyday[5] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
+                                daysOfTheWeek.add(new CityWeatherData(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
                                 everyday[5] = 1;
                             }
                             if(convertTimeToDay(time).equals("Sun") && everyday[6] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
+                                daysOfTheWeek.add(new CityWeatherData(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
                                 everyday[6] = 1;
                             }
                             cityViewFiveDayAdapter = new CityViewFiveDayAdapter(getActivity(), daysOfTheWeek);

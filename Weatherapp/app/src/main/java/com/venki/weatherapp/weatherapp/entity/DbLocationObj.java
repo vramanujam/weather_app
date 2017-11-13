@@ -1,12 +1,12 @@
 package com.venki.weatherapp.weatherapp.entity;
 
-public class DatabaseLocationObject {
+public class DbLocationObj {
 
     private int id;
 
     private String location;
 
-    public DatabaseLocationObject(int id, String location) {
+    public DbLocationObj(int id, String location) {
         this.id = id;
         this.location = location;
     }

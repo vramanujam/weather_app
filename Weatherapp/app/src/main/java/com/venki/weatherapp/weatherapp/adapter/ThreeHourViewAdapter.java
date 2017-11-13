@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 
 import com.venki.weatherapp.weatherapp.R;
 import com.venki.weatherapp.weatherapp.database.DatabaseQuery;
-import com.venki.weatherapp.weatherapp.entity.WeatherObject;
+import com.venki.weatherapp.weatherapp.entity.CityWeatherData;
 import com.venki.weatherapp.weatherapp.helpers.Helper;
-import com.venki.weatherapp.weatherapp.helpers.ImageLoadTask;
+import com.venki.weatherapp.weatherapp.helpers.ImageLoader;
 
 import java.util.List;
 
@@ -19,14 +19,14 @@ import java.util.List;
  */
 
 public class ThreeHourViewAdapter extends RecyclerView.Adapter<ThreeHourViewHolders>{
-    private List<WeatherObject> dailyWeather;
+    private List<CityWeatherData> dailyWeather;
 
     private DatabaseQuery dbQuery;
 
     private String degreeMetric;
 
     protected Context context;
-    public ThreeHourViewAdapter(Context context, List<WeatherObject> dailyWeather) {
+    public ThreeHourViewAdapter(Context context, List<CityWeatherData> dailyWeather) {
         this.dailyWeather = dailyWeather;
         this.context = context;
     }
@@ -43,7 +43,7 @@ public class ThreeHourViewAdapter extends RecyclerView.Adapter<ThreeHourViewHold
     public void onBindViewHolder(ThreeHourViewHolders holder, int position) {
         degreeMetric = "C";
 
-        new ImageLoadTask("http://openweathermap.org/img/w/" + dailyWeather.get(position).getWeatherUrl() + ".png", holder.weatherIcon).execute();
+        new ImageLoader("http://openweathermap.org/img/w/" + dailyWeather.get(position).getWeatherUrl() + ".png", holder.weatherIcon).execute();
         long mTemp = (long)Double.parseDouble(dailyWeather.get(position).getWeatherResult());
         dbQuery = new DatabaseQuery(context);
 

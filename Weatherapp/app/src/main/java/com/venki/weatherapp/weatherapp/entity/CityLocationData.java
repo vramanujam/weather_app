@@ -1,7 +1,7 @@
 package com.venki.weatherapp.weatherapp.entity;
 
 
-public class LocationObject {
+public class CityLocationData {
 
     private int id;
 
@@ -13,7 +13,7 @@ public class LocationObject {
 
     private String currTime;
 
-    public LocationObject(int id, String locationCity, String weatherInformation, String temp_min_max, String timeToDisplay) {
+    public CityLocationData(int id, String locationCity, String weatherInformation, String temp_min_max, String timeToDisplay) {
         this.id = id;
         this.locationCity = locationCity;
         this.weatherInformation = weatherInformation;

@@ -1,7 +1,7 @@
 package com.venki.weatherapp.weatherapp.entity;
 
 
-public class WeatherObject {
+public class CityWeatherData {
 
     private String dayOfWeek;
 
@@ -15,7 +15,7 @@ public class WeatherObject {
 
     private String weatherUrl;
 
-    public WeatherObject(String dayOfWeek, int weatherIcon, String weatherResult, String weatherResultSmall, String weatherResultBig) {
+    public CityWeatherData(String dayOfWeek, int weatherIcon, String weatherResult, String weatherResultSmall, String weatherResultBig) {
         this.dayOfWeek = dayOfWeek;
         this.weatherIcon = weatherIcon;
         this.weatherResult = weatherResult;
@@ -23,7 +23,7 @@ public class WeatherObject {
         this.weatherResultBig = weatherResultBig;
     }
 
-    public WeatherObject(String dayOfWeek, String weatherIcon, String weatherResult, String weatherResultSmall, String weatherResultBig) {
+    public CityWeatherData(String dayOfWeek, String weatherIcon, String weatherResult, String weatherResultSmall, String weatherResultBig) {
         this.dayOfWeek = dayOfWeek;
         this.weatherUrl = weatherIcon;
         this.weatherResult = weatherResult;

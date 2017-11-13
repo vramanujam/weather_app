@@ -5,7 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.venki.weatherapp.weatherapp.entity.DatabaseLocationObject;
+import com.venki.weatherapp.weatherapp.entity.DbLocationObj;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +29,8 @@ public class DatabaseQuery extends DatabaseObject{
         cursor.close();
     }
 
-    public List<DatabaseLocationObject> getStoredDataLocations(){
-        List<DatabaseLocationObject> allLocations = new ArrayList<DatabaseLocationObject>();
+    public List<DbLocationObj> getStoredDataLocations(){
+        List<DbLocationObj> allLocations = new ArrayList<DbLocationObj>();
         String query = "Select * from data";
         Cursor cursor = this.getDbConnection().rawQuery(query, null);
         if(cursor.moveToFirst()){
@@ -39,7 +39,7 @@ public class DatabaseQuery extends DatabaseObject{
                 System.out.println("Response number " + id);
                 String storedData = cursor.getString(cursor.getColumnIndexOrThrow("cotent"));
                 System.out.println("Response number " + storedData);
-                allLocations.add(new DatabaseLocationObject(id, storedData));
+                allLocations.add(new DbLocationObj(id, storedData));
             }while (cursor.moveToNext());
         }
         cursor.close();
