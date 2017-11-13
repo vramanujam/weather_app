@@ -70,7 +70,7 @@ import org.joda.time.DateTimeComparator;
 import org.joda.time.DateTimeUtils;
 
 public class SampleFragment extends Fragment implements LocationListener {
-    private static final String TAG = WeatherActivity.class.getSimpleName();
+    private static final String TAG = SampleFragment.class.getSimpleName();
 
     private RecyclerView recyclerView;
 

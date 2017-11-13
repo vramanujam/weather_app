@@ -22,7 +22,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCZdAm6XohRlZgvghhJ0kXarSWXrIH94QE" />
 
-        <activity android:name=".WeatherActivity" />
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait">
             android:label="@string/app_name">

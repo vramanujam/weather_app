@@ -8,12 +8,9 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.RadioButton;
-import android.widget.Toast;
 
 import com.venki.weatherapp.weatherapp.R;
-import com.venki.weatherapp.weatherapp.WeatherActivity;
 import com.venki.weatherapp.weatherapp.cityview;
 import com.venki.weatherapp.weatherapp.database.DatabaseQuery;
 import com.venki.weatherapp.weatherapp.entity.LocationObject;
@@ -105,7 +102,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationHolders> /*imp
             @Override
             public void onClick(View view) {
                 //Toast.makeText(context, "should change", Toast.LENGTH_LONG).show();
-                Intent addLocationIntent = new Intent(context, WeatherActivity.class);
+                Intent addLocationIntent = new Intent(context, cityview.class);
                 addLocationIntent.putExtra("city",cityName);
                 context.startActivity(addLocationIntent);
             }
