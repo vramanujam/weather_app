@@ -125,18 +125,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
         }
 
-        //Toast.makeText(MainActivity.this, "Count number of locations " + allLocations.size(), Toast.LENGTH_LONG).show();
-
-//        ImageButton addLocation = (ImageButton) findViewById(R.id.add_location);
-        /*addLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //venkatesh - to be modified
-                //Intent addLocationIntent = new Intent(MainActivity.this, AddLocationActivity.class);
-                //startActivity(addLocationIntent);
-            }
-        });*/
-
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.add_location);
 
@@ -147,12 +135,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 Log.i(TAG, "Place: " + place.getName());
                 allData = new ArrayList<LocationObject>();
                 query = new DatabaseQuery(MainActivity.this);
-                //String city[] = query.getCurrentCity().split(",");
-                /*if(place.getName().toString().equals(city[0])){
-                    System.out.println("This is Current City");
-                }
-                else
-                    System.out.println("City entered "+ place.getName().toString());*/
                 if(query.insertNewLocation(place.getName().toString()))
                 {
                     query = new DatabaseQuery(MainActivity.this);
@@ -175,10 +157,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 Log.i(TAG, "An error occurred: " + status);
             }
         });
-        //query.createTablesRequired();
-        //query.insertCurrentLocation("Dubai, In");
-        //query = new DatabaseQuery(MainActivity.this);
-        //System.out.println("current city is" + query.getCurrentCity());
         AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
                 .setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES)
                 .build();
@@ -188,8 +166,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         final Button button = findViewById(R.id.add_current_location);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Code here executes on main thread after user presses button allData = new ArrayList<LocationObject>();
-
                 allData = new ArrayList<LocationObject>();
                 query = new DatabaseQuery(MainActivity.this);
                 if(query.insertNewLocation(query.getCurrentCity()))
@@ -272,32 +248,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 	//--
     @Override
     public void onLocationChanged(Location location) {
-        //You had this as int. It is advised to have Lat/Loing as double.
-        /*double lat = location.getLatitude();
-        double lng = location.getLongitude();
 
-        Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
-        StringBuilder builder = new StringBuilder();
-        try {
-            List<Address> address = geoCoder.getFromLocation(lat, lng, 1);
-            int maxLines = address.get(0).getMaxAddressLineIndex();
-            for (int i=0; i<maxLines; i++) {
-                String addressStr = address.get(0).getAddressLine(i);
-                builder.append(addressStr);
-                builder.append(" ");
-            }
-
-            String fnialAddress = builder.toString(); //This is the complete address.
-
-            latituteField.setText(String.valueOf(lat));
-            longitudeField.setText(String.valueOf(lng));
-            addressField.setText(fnialAddress); //This will display the final address.
-
-        } catch (IOException e) {
-            // Handle IOException
-        } catch (NullPointerException e) {
-            // Handle NullPointerException
-        }*/
     }
 
     private void updateLocationinDB(String  url){
@@ -312,8 +263,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 if (null == locationMapObject) {
                     Toast.makeText(getApplicationContext(), "Nothing was returned", Toast.LENGTH_LONG).show();
                 } else {
-                    //int rowId = paramValue.getId();
-                    //Long tempVal = Math.round(Math.floor(Double.parseDouble(locationMapObject.getMain().getTemp())));
                     String city = locationMapObject.getName() /*+ ", " + locationMapObject.getSys().getCountry()*/;
                     query.insertCurrentLocation(city);
                     System.out.println("Got the current Location as " + query.getCurrentCity());
@@ -374,8 +323,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                         public void onResponse(JSONObject response) {
                             Log.d("MainActivity", "Response " + response);
                             System.out.println("Response Object" + response);
-
-//                            response = gson.toJson(response);
                             try {
                                 // to be fine-tuned by Smitha
                                 String timeZoneId = response.getString("timeZoneId");
@@ -395,15 +342,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                             catch(JSONException e){
                                 Log.e("Android Weather App", "Unexpected JSON exception", e);
                             }
-
-
-
-//                            if(response.status == "OK") {
-//                                int dstOffset = response.dstOffset;
-//                                int rawOffset = response.rawOffset;
-//                                System.out.println("dstOff val: " + dstOffset);
-//                                System.out.println("rawOff val: " + rawOffset);
-//                            }
                         }
                     }, new Response.ErrorListener() {
                         @Override

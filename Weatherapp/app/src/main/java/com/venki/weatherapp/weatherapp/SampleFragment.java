@@ -38,7 +38,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.github.pavlospt.CircleView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.venki.weatherapp.weatherapp.adapter.RecyclerViewAdapter;
@@ -63,11 +62,9 @@ import java.util.List;
 import java.util.Locale;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import org.joda.time.DateTimeComparator;
-import org.joda.time.DateTimeUtils;
 
 public class SampleFragment extends Fragment implements LocationListener {
     private static final String TAG = SampleFragment.class.getSimpleName();
@@ -379,37 +376,34 @@ public class SampleFragment extends Fragment implements LocationListener {
                                     System.out.println("Weather info is null " + weatherInfo.get(i).getConditions().get(0).getDescription());
                                 String icon = weatherInfo.get(i).getConditions().get(0).getIcon();
                                 threeHourForecast.add(new WeatherObject(hour[1], icon, temp, weatherInfo.get(i).getConditions().get(0).getMain(),tempMaximum));
-                                /*System.out.println("Current Day");
-                                System.out.println("time " + time);
-                                System.out.println("temp "+ temp);*/
                             }
 
                             if(convertTimeToDay(time).equals("Mon") && everyday[0] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin,tempMaximum));
+                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
                                 everyday[0] = 1;
                             }
                             if(convertTimeToDay(time).equals("Tue") && everyday[1] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin,tempMaximum));
+                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
                                 everyday[1] = 1;
                             }
                             if(convertTimeToDay(time).equals("Wed") && everyday[2] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin,tempMaximum));
+                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
                                 everyday[2] = 1;
                             }
                             if(convertTimeToDay(time).equals("Thu") && everyday[3] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin,tempMaximum));
+                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
                                 everyday[3] = 1;
                             }
                             if(convertTimeToDay(time).equals("Fri") && everyday[4] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin,tempMaximum));
+                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
                                 everyday[4] = 1;
                             }
                             if(convertTimeToDay(time).equals("Sat") && everyday[5] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin,tempMaximum));
+                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
                                 everyday[5] = 1;
                             }
                             if(convertTimeToDay(time).equals("Sun") && everyday[6] < 1){
-                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.small_weather_icon, temp, tempMin,tempMaximum));
+                                daysOfTheWeek.add(new WeatherObject(shortDay, R.drawable.ico_cloud, temp, tempMin,tempMaximum));
                                 everyday[6] = 1;
                             }
                             recyclerViewAdapter = new RecyclerViewAdapter(getActivity(), daysOfTheWeek);

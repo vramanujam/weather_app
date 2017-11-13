@@ -3,22 +3,6 @@ package com.venki.weatherapp.weatherapp.helpers;
 
 public class Helper {
 
-    public static final String MANAGER_LOCATION = "Manager Location";
-
-    public static final String LOCATION_LIST = "Location List";
-
-    public static final String LOCATION_ERROR_MESSAGE = "Input field must be filled";
-
-    public static final String PREFS_TAG = "prefs";
-
-    public static final String STORED_DATA_FIRST = "data_first";
-
-    public static final String STORED_DATA_SECOND = "data_second";
-
-    public static final String IS_DATA_PRESENT = "isData";
-
-    public static final String LOCATION_PREFS = "location_prefs";
-
     public static final String API_KEY = "bad2095b13c85ff8faf06c3226f11706";
 
     public static final String TIMEZONE_API_KEY = "AIzaSyCVJgavv_J2EpKMvFf16AzzmejkvpxoaVI";

@@ -18,8 +18,5 @@
     <string name="add_new_location">Add new location</string>
     <string name="stored_location">You can only store 5 locations</string>
     <string name="permission_notice">This permission is important but you can as well set your location on Location page</string>
-    <string name="go_to_location">Go to location setting</string>
     <string name="google_api_key">AIzaSyCe0vdT73vtLNX8NR7HgRe3ekZ4UgR2e6Q</string>
-
-
 </resources>

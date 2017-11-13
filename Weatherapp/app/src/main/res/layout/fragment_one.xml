@@ -38,7 +38,7 @@
             android:layout_height="67dp"
             android:layout_gravity="center_horizontal"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/sun"
+            android:src="@drawable/ico_partly_cloudy"
             android:layout_marginTop="@dimen/_21sdp"/>
 
          <TextView
