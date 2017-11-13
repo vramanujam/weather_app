@@ -288,8 +288,6 @@ public class SampleFragment extends Fragment implements LocationListener {
                         makeJsonObject(apiUrl);
                     }*/
                 }
-            }else{
-                Toast.makeText(getActivity(), getString(R.string.permission_notice), Toast.LENGTH_LONG).show();
             }
         }
     }

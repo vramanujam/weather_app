@@ -14,17 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textSize="@dimen/_12sdp"
-        android:text="@string/day_of_week"
+        android:text=""
         android:textColor="@color/colorWhite"/>
-
-    <!-- <ImageView
-        android:id="@+id/weather_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/small_weather_icon"
-        android:layout_marginTop="@dimen/_4sdp"
-        android:layout_gravity="center_horizontal"/> -->
 
     <TextView
         android:id="@+id/weather_result"
@@ -33,17 +24,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/_4sdp"
         android:textSize="@dimen/_11sdp"
-        android:text="@string/current_temperature"
+        android:text=""
         android:textColor="@color/colorWhite"/>
-
-    <!-- <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/_4sdp"
-        android:textSize="@dimen/_8sdp"
-        android:text="Min:"
-        android:textColor="@color/colorWhite" /> -->
 
     <TextView
         android:id="@+id/weather_result_small"
@@ -52,17 +34,8 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/_4sdp"
         android:textSize="@dimen/_8sdp"
-        android:text="@string/current_temperature"
+        android:text=""
         android:textColor="@color/colorWhite"/>
-
-    <!-- <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/_4sdp"
-        android:textSize="@dimen/_8sdp"
-        android:text="Min:"
-        android:textColor="@color/colorWhite" /> -->
 
     <TextView
         android:id="@+id/weather_result_big"
@@ -71,6 +44,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/_4sdp"
         android:textSize="@dimen/_8sdp"
-        android:text="@string/current_temperature"
+        android:text=""
         android:textColor="@color/colorWhite"/>
 </LinearLayout>

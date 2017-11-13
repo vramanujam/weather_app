@@ -7,7 +7,4 @@
     <color name="colorWhite">#ffffff</color>
     <string name="delete_text">X</string>
     <color name="colorBackground">#808080</color>
-    <color name="colorBottomBackground">#729101</color>
-    <color name="colorCircleStroke">#df9502</color>
-    <color name="colorSubTitle">#38455B</color>
 </resources>

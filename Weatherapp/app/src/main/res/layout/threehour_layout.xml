@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:textSize="@dimen/_8sdp"
-        android:text="@string/day_of_week"
+        android:text=""
         android:textColor="@color/colorBlack"/>
 
     <ImageView
@@ -33,7 +33,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/_4sdp"
         android:textSize="@dimen/_11sdp"
-        android:text="@string/current_temperature"
+        android:text=""
         android:textColor="@color/colorBlack"/>
 
     <TextView
@@ -43,25 +43,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/_4sdp"
         android:textSize="@dimen/_8sdp"
-        android:text="@string/current_temperature"
+        android:text=""
         android:textColor="@color/colorBlack"/>
-    <!-- <TextView
-        android:id="@+id/three_hour_weather_result_small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/_4sdp"
-        android:textSize="@dimen/_8sdp"
-        android:text="@string/current_temperature"
-        android:textColor="@color/colorWhite"/>
 
-    <TextView
-        android:id="@+id/three_hour_weather_result_big"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/_4sdp"
-        android:textSize="@dimen/_8sdp"
-        android:text="@string/current_temperature"
-        android:textColor="@color/colorWhite"/> -->
 </LinearLayout>

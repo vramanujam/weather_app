@@ -31,7 +31,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     @Override
     public RecyclerViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerViewHolders viewHolder = null;
-        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.weather_daily_list, parent, false);
+        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.five_day_view, parent, false);
         viewHolder = new RecyclerViewHolders(layoutView);
         return viewHolder;
     }

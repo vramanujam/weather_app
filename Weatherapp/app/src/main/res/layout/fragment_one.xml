@@ -69,7 +69,7 @@
             android:layout_gravity="center_horizontal"
             android:textSize="@dimen/_12sdp"
             android:layout_marginTop="@dimen/_4sdp"
-            android:text="@string/humidity_rate"/>
+            android:text=""/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -128,7 +128,6 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/_14sdp"
                     android:layout_gravity="center_horizontal"
-
                     android:textStyle="bold"
                     android:text="@string/humidity"/>
 
